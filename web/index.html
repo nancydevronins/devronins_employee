@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <!--
+    If you are serving your web app in a path other than the root, change the
+    href value below to reflect the base path you are serving from.
+
+    The path provided below has to start and end with a slash "/" in order for
+    it to work correctly.
+
+    For more details:
+    * https://developer.mozilla.org/en-US/docs/Web/HTML/Element/base
+
+    This is a placeholder for base href that will be replaced by the value of
+    the `--base-href` argument provided to `flutter build`.
+  -->
+  <base href="$FLUTTER_BASE_HREF">
+
+  <meta charset="UTF-8">
+  <meta content="IE=Edge" http-equiv="X-UA-Compatible">
+  <meta name="description" content="A new Flutter project.">
+
+  <!-- iOS meta tags & icons -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="apple-mobile-web-app-title" content="devronins_employeeee">
+  <link rel="apple-touch-icon" href="icons/Icon-192.png">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="favicon.png"/>
+
+  <title>devronins_employeeee</title>
+  <link rel="manifest" href="manifest.json">
+</head>
+<style>
+    .loading {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin: 0;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      -ms-transform: translate(-50%, -50%);
+      transform: translate(-50%, -50%);
+    }
+
+    .loader {
+      border: 16px solid #f3f3f3;
+      border-radius: 50%;
+      border: 15px solid ;
+       border-top: 16px solid blue;
+       border-right: 16px solid green;
+     border-bottom: 16px solid red;
+     border-left: 16px solid pink;
+      width: 120px;
+      height: 120px;
+      -webkit-animation: spin 2s linear infinite;
+      animation: spin 2s linear infinite;
+    }
+
+    @-webkit-keyframes spin {
+      0% {
+        -webkit-transform: rotate(0deg);
+      }
+      100% {
+        -webkit-transform: rotate(360deg);
+      }
+    }
+
+    @keyframes spin {
+      0% {
+        transform: rotate(0deg);
+      }
+      100% {
+        transform: rotate(360deg);
+      }
+    }
+  </style>
+<body>
+<div class="loading">
+  <div class="loader"></div>
+</div>
+<script>
+window.onLoad = function(){
+setTimeout(function(){
+var loader = document.getElementByClass("loading);
+if(loader){
+loader.remove();
+}
+},40000
+)
+}
+
+</script>
+<script src="https://www.gstatic.com/firebasejs/9.6.8/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.6.8/firebase-analytics.js"></script>
+
+<script type="module">
+
+
+  // Your web app's Firebase configuration
+  // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+  const firebaseConfig = {
+    apiKey: "AIzaSyAecu-UvEODyZ_juXY5rTVc9dfWS2pPdoY",
+    authDomain: "devroninsemployeeee.firebaseapp.com",
+    projectId: "devroninsemployeeee",
+    storageBucket: "devroninsemployeeee.appspot.com",
+    messagingSenderId: "379959193257",
+    appId: "1:379959193257:web:453c15fd0f278dd6cb83b8",
+    measurementId: "G-8JMRVJQ84D"
+  };
+
+  // Initialize Firebase
+  firebase.initializeApp(firebaseConfig);
+    firebase.analytics();
+</script>
+
+
+
+
+<script src="main.dart.js" type="application/javascript"></script>
+
+</body>
+</html>
