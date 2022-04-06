@@ -1,23 +1,49 @@
-import 'package:flutter/material.dart';
-
 class AppStrings {
-  static String appName = "DevRonins";
-  static String logIn = "Login";
-  static String logInSubHeading = "Hello! Log in with your email.";
-  static String designations = "Designations";
-  static String addDesignation = "Add Designation";
-  static String title = "Title";
-  static String actions = "Actions";
-  static String edit = "Edit";
-  static String delete = "Delete";
-  static String designationTitle = "Designation Title";
-  static String save = "Save";
-  static String cancel = "Cancel";
-  static String enterDesignation = " Please enter the designation";
-  static String addEmployee = "Add Employee";
-  static String firstName = "First Name";
-  static String lastName = "Last Name";
-  static String email = "Email";
-  static String password = "Password";
-  static String selectDesignations = "Select Designations";
+  static final AppStrings _singleton = AppStrings._internal();
+
+  factory AppStrings() {
+    return _singleton;
+  }
+
+  AppStrings._internal();
+
+  final Map<String, String> _localizedStrings = {
+    "app_name": "DevRonins",
+    "select_designations": "Select Designations",
+    "create_account": "Create Account",
+    "submit": "Submit",
+    "forgot_password": "Forgot Password?",
+    "validation_empty_password": "Enter Password",
+    "validation_password_length": "Password should be greater then 6 characters",
+    "password": "Password",
+    "validation_email": "Enter Valid Email",
+    "email": "Email",
+    "login": "Login",
+    "login_sub_heading": "Hello! Login with your Email",
+    "add_employee": "Add Employee",
+    "first_name": "First Name",
+    "validation_first_name": "Enter First Name",
+    "last_name": "Last Name",
+    "validation_last_name": "Enter Last Name",
+    "cancel": "Cancel",
+    "save": "Save",
+    "edit": "Edit",
+    "delete": "Delete",
+    "send": "Send",
+    "designations": "Designations",
+    "add_designation": "Add Designation",
+    "title": "Title",
+    "actions": "Actions",
+    "designation_title": "Designation Title",
+    "validation_designation": "Enter Designation",
+    "please_wait": "Please Wait...",
+    "user_not_found": "There is no user associated with this email",
+    "wrong-password": "You have entered wrong password",
+    "enter_email_for_forgot_password": "Enter your email below to get reset password link",
+    "reset_password_link_sent": "We have sent reset password link to given email."
+  };
+
+  String translate(String key) {
+    return _localizedStrings[key] ?? 'No Key Available';
+  }
 }

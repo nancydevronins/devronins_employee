@@ -1,14 +1,12 @@
+import 'package:devronins_employeeee/constants/helper/app_helper.dart';
 import 'package:devronins_employeeee/controllers/firebase_auth_controller.dart';
-import 'package:devronins_employeeee/screens/signup_screen.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:devronins_employeeee/screens/welcome_screen.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-import 'package:flutter/painting.dart';
 import '../constants/colors.dart';
-import '../constants/strings.dart';
 import '../responsive_layout.dart';
 import '../widgets/resourses.dart';
-import 'package:get/get.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -18,25 +16,27 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  GlobalKey<FormState> formKey = GlobalKey();
+  GlobalKey<FormState>? formKey;
+
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
 
   final FocusNode emailFocus = FocusNode();
   final FocusNode passwordFocus = FocusNode();
 
-  late bool _visiblePassword = true;
+  late bool _visiblePassword = false;
+
+  @override
+  void initState() {
+    super.initState();
+    formKey = GlobalKey();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColor.scaffoldBackGroundColor,
-      body: ResponsiveLayout(
-          tiny: container(),
-          phone: container(),
-          tablet: container(),
-          largeTablet: container(),
-          computer: container()),
+      body: ResponsiveLayout(tiny: container(), phone: container(), tablet: container(), largeTablet: container(), computer: container()),
     );
   }
 
@@ -45,8 +45,18 @@ class _LoginScreenState extends State<LoginScreen> {
       child: Container(
         width: double.infinity,
         height: double.infinity,
-        margin: EdgeInsets.all(50),
-        color: Colors.white,
+        margin: const EdgeInsets.all(50),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          shape: BoxShape.rectangle,
+          borderRadius: BorderRadius.circular(10),
+          boxShadow: const [
+            BoxShadow(
+              color: Colors.grey,
+              blurRadius: 20.0,
+            ),
+          ],
+        ),
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 100),
           child: Form(
@@ -55,8 +65,8 @@ class _LoginScreenState extends State<LoginScreen> {
               child: Column(
                 children: [
                   TextWidget(
-                    text: AppStrings.logIn,
-                    textColor: Color(0xFFff52a3d8),
+                    text: getString(context, "login"),
+                    textColor: AppColor.appBlue,
                     fontSize: 30,
                     fontWeight: FontWeight.bold,
                   ),
@@ -64,8 +74,8 @@ class _LoginScreenState extends State<LoginScreen> {
                     height: 20,
                   ),
                   TextWidget(
-                    text: AppStrings.logInSubHeading,
-                    textColor: Color(0xFFff52a3d8),
+                    text: getString(context, "login_sub_heading"),
+                    textColor: AppColor.appBlue,
                     fontSize: 20,
                     fontWeight: FontWeight.w500,
                   ),
@@ -80,16 +90,20 @@ class _LoginScreenState extends State<LoginScreen> {
                       controller: emailController,
                       obscureText: false,
                       textInputType: TextInputType.emailAddress,
-                      hintText: "Email address:",
-                      functionValidate: (email) {
-                        const pattern1 =
-                            r'^[a-zA-Z0-9._]+@[a-zA-Z0-9]+\.[a-zA-Z]+';
-                        final regExp1 = RegExp(pattern1);
-                        if (email!.isEmpty) {
-                          return "please enter the email address";
-                        } else if (!regExp1.hasMatch(email)) {
-                          return "please enter the valid email";
+                      hintText: getString(context, "email"),
+                      errorText: emailError,
+                      onChanged: (value) {
+                        if(emailError != null && value.toString().isNotEmpty) {
+                          setState(() {
+                            emailError = null;
+                          });
                         }
+                      },
+                      functionValidate: (email) {
+                        if (!isValidEmail(email)) {
+                          return getString(context, "validation_email");
+                        }
+                        return null;
                       },
                     ),
                   ),
@@ -104,12 +118,20 @@ class _LoginScreenState extends State<LoginScreen> {
                       controller: passwordController,
                       obscureText: !_visiblePassword,
                       textInputType: TextInputType.visiblePassword,
-                      hintText: "Password:",
+                      hintText: getString(context, "password"),
+                      errorText: passwordError,
+                      onChanged: (value) {
+                        if(passwordError != null && value.toString().isNotEmpty) {
+                          setState(() {
+                            passwordError = null;
+                          });
+                        }
+                      },
                       functionValidate: (password) {
-                        if (password!.isEmpty) {
-                          return "plaese enter the password";
-                        } else if (password.length < 6) {
-                          return "Password should be greater then six";
+                        if (!isValidPasswordLength(password)) {
+                          return getString(context, "validation_password_length");
+                        } else {
+                          return null;
                         }
                       },
                       suffixIcon: InkWell(
@@ -119,9 +141,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           });
                         },
                         child: Icon(
-                          _visiblePassword
-                              ? Icons.visibility_off
-                              : Icons.visibility,
+                          _visiblePassword ? Icons.visibility_off : Icons.visibility,
                           color: Colors.grey,
                         ),
                       ),
@@ -135,11 +155,13 @@ class _LoginScreenState extends State<LoginScreen> {
                     child: Align(
                       alignment: Alignment.bottomRight,
                       child: TextButton(
-                        onPressed: () {},
-                        child: const TextWidget(
+                        onPressed: () {
+                          openForgotPasswordDialog();
+                        },
+                        child: TextWidget(
                           fontSize: 14,
-                          fontWeight: FontWeight.bold,
-                          text: 'Forget Password',
+                          fontWeight: FontWeight.w500,
+                          text: getString(context, "forgot_password"),
                           textColor: Colors.grey,
                         ),
                       ),
@@ -152,44 +174,32 @@ class _LoginScreenState extends State<LoginScreen> {
                     width: 500,
                     child: TextButton(
                       style: ButtonStyle(
-                        padding: MaterialStateProperty.all(EdgeInsets.all(24)),
-                        backgroundColor:
-                            MaterialStateProperty.all(Color(0xFFff8dbb55)),
+                        padding: MaterialStateProperty.all(const EdgeInsets.all(24)),
+                        backgroundColor: MaterialStateProperty.all(AppColor.appGreen),
                       ),
-                      onPressed: () {
-                        if (formKey.currentState!.validate()) {
-                          AuthController.instance.loginUser(
-                              emailController.text.trim(),
-                              passwordController.text.trim());
+                      onPressed: () async {
+                        if (formKey?.currentState?.validate() == true) {
+                          progressDialog(true, context);
+                          var result = await AuthController.instance.loginUser(emailController.text.trim(), passwordController.text.trim());
+                          progressDialog(false, context);
+                          if (result is FirebaseAuthException) {
+                            handleFirebaseExceptions(result);
+                          } else if (result is UserCredential && result.user != null) {
+                            showTopSnackBar(context, message: "Logged In Successfully!");
+                            openPage(context, const WelcomeScreen());
+                          }
                         }
                       },
-                      child: const TextWidget(
+                      child: TextWidget(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
-                        text: 'Submit',
+                        text: getString(context, "submit"),
                         textColor: Colors.white,
                       ),
                     ),
                   ),
                   const SizedBox(
                     height: 50,
-                  ),
-                  SizedBox(
-                    width: 500,
-                    child: Align(
-                      alignment: Alignment.center,
-                      child: TextButton(
-                        onPressed: () {
-                          Get.to(const SignupScreen());
-                        },
-                        child: const TextWidget(
-                          fontSize: 14,
-                          fontWeight: FontWeight.bold,
-                          text: 'Create Account',
-                          textColor: Color(0xFFff52a3d8),
-                        ),
-                      ),
-                    ),
                   ),
                 ],
               ),
@@ -199,4 +209,102 @@ class _LoginScreenState extends State<LoginScreen> {
       ),
     );
   }
+
+  String? emailError;
+  String? passwordError;
+
+  void handleFirebaseExceptions(FirebaseAuthException error) {
+    switch (error.code) {
+      case "user-not-found":
+        setState(() {
+          emailError = getString(context, "user_not_found");
+        });
+        break;
+      case "wrong-password":
+        setState(() {
+          passwordError = getString(context, "wrong-password");
+        });
+        break;
+      default:
+        print(error.toString());
+        break;
+    }
+  }
+
+  void openForgotPasswordDialog() {
+    final TextEditingController emailController = TextEditingController();
+    String? emailError;
+    bool sendEmail = false;
+    showDialog(
+        context: context,
+        builder: (context) {
+          return StatefulBuilder(builder: (context, StateSetter setState) {
+            return AlertDialog(
+              title: Text(getString(context, "forgot_password"), style: appSemiBoldTextStyle(fontSize: 16),),
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(getString(context, "enter_email_for_forgot_password"), style: appRegularTextStyle(fontSize: 12, color: AppColor.color818181),),
+                  space(height: 4),
+                  TextFormFieldWidget(
+                    controller: emailController,
+                    obscureText: false,
+                    textInputType: TextInputType.emailAddress,
+                    hintText: getString(context, "email"),
+                    errorText: emailError,
+                    textStyle: appRegularTextStyle(fontSize: 16),
+                    onChanged: (value) {
+                      if(emailError != null && value.toString().isNotEmpty) {
+                        print('Entered value: $value');
+                        setState(() {
+                          print('Entered value****: $value');
+                          emailError = null;
+                        });
+                      }
+                    },
+                    functionValidate: (email) {
+                      if (!isValidEmail(email)) {
+                        return getString(context, "validation_email");
+                      }
+                      return null;
+                    },
+                  )
+                ],
+              ),
+              actions: [
+                TextButton(
+                  onPressed: () async {
+                    sendEmail = false;
+                    Navigator.pop(context);
+                  },
+                  child: Text(getString(context, "cancel"), style: appRegularTextStyle(fontSize: 16),),
+                ),
+                TextButton(
+                  onPressed: () {
+                    if(!isValidEmail(emailController.text.trim())) {
+                      setState((){
+                        emailError = getString(context, "validation_email");
+                      });
+                    } else {
+                      sendEmail = true;
+                      Navigator.pop(context);
+                    }
+                  },
+                  child: Text(getString(context, "send"), style: appRegularTextStyle(fontSize: 16),),
+                ),
+              ],
+            );
+          });
+        }).then((value) async {
+        if(sendEmail) {
+          sendEmail = false;
+          progressDialog(true, context);
+          await FirebaseAuth.instance.sendPasswordResetEmail(email: emailController.text.trim());
+          progressDialog(false, context);
+          showTopSnackBar(context, message: getString(context, "reset_password_link_sent"));
+        }
+    });
+
+  }
+
 }

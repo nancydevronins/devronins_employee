@@ -1,9 +1,7 @@
-import 'package:devronins_employeeee/constants/strings.dart';
+import 'package:devronins_employeeee/constants/helper/app_helper.dart';
 import 'package:devronins_employeeee/controllers/firebase_auth_controller.dart';
-import 'package:devronins_employeeee/modals/services_modal.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 
 import '../constants/colors.dart';
 import '../responsive_layout.dart';
@@ -20,8 +18,7 @@ class DesignationsListing extends StatefulWidget {
 class _DesignationsListingState extends State<DesignationsListing> {
   GlobalKey<FormState> formKey = GlobalKey();
   final TextEditingController designationController = TextEditingController();
-  final TextEditingController addDesignationController =
-      TextEditingController();
+  final TextEditingController addDesignationController = TextEditingController();
   String? docId;
 
   @override
@@ -35,10 +32,7 @@ class _DesignationsListingState extends State<DesignationsListing> {
       backgroundColor: AppColor.scaffoldBackGroundColor,
       appBar: PreferredSize(
         preferredSize: Size(double.infinity, 100),
-        child: (ResponsiveLayout.isTinyLimit(context) ||
-                ResponsiveLayout.isTinyHeightLimit(context)
-            ? Container()
-            : AppBar()),
+        child: (ResponsiveLayout.isTinyLimit(context) || ResponsiveLayout.isTinyHeightLimit(context) ? Container() : AppBar()),
       ),
       body: ResponsiveLayout(
         tiny: _designationsListing(),
@@ -64,21 +58,14 @@ class _DesignationsListingState extends State<DesignationsListing> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                TextWidget(
-                    text: AppStrings.designations,
-                    textColor: Colors.black,
-                    fontSize: 14.0,
-                    fontWeight: FontWeight.w600),
+                TextWidget(text: getString(context, "designations"), textColor: Colors.black, fontSize: 14.0, fontWeight: FontWeight.w600),
                 TextButton(
                     onPressed: () {
                       openAddDesignationPopUp();
                     },
-                    style: ButtonStyle(
-                        padding: MaterialStateProperty.all(EdgeInsets.all(16)),
-                        backgroundColor:
-                            MaterialStateProperty.all(Color(0xFFff8dbb55))),
+                    style: ButtonStyle(padding: MaterialStateProperty.all(const EdgeInsets.all(16)), backgroundColor: MaterialStateProperty.all(AppColor.appGreen)),
                     child: TextWidget(
-                      text: AppStrings.addDesignation,
+                      text: getString(context, "add_designation"),
                       textColor: Colors.white,
                       fontWeight: FontWeight.w500,
                       fontSize: 16.0,
@@ -93,13 +80,13 @@ class _DesignationsListingState extends State<DesignationsListing> {
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 TextWidget(
-                  text: AppStrings.title,
+                  text: getString(context, "title"),
                   textColor: Colors.black,
                   fontWeight: FontWeight.w600,
                   fontSize: 16.0,
                 ),
                 TextWidget(
-                  text: AppStrings.actions,
+                  text: getString(context, "actions"),
                   textColor: Colors.black,
                   fontWeight: FontWeight.w600,
                   fontSize: 16.0,
@@ -112,7 +99,7 @@ class _DesignationsListingState extends State<DesignationsListing> {
             if (snapshot.hasError) {
               return Text(snapshot.error.toString());
             } else if (snapshot.hasData == null) {
-              return Center(child: const CircularProgressIndicator());
+              return const Center(child: CircularProgressIndicator());
             } else {
               return Expanded(
                 child: ListView.separated(
@@ -123,8 +110,7 @@ class _DesignationsListingState extends State<DesignationsListing> {
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: [
                             TextWidget(
-                              text: AuthController.instance
-                                  .designationsListing[index].designationTitle,
+                              text: AuthController.instance.designationsListing[index].designationTitle,
                               textColor: Colors.black,
                               fontWeight: FontWeight.w500,
                               fontSize: 16.0,
@@ -132,26 +118,23 @@ class _DesignationsListingState extends State<DesignationsListing> {
                             Row(
                               children: [
                                 TextButton(
-                                    onPressed: () {
-                                      designationController.text =
-                                          AuthController
-                                              .instance
-                                              .designationsListing[index]
-                                              .designationTitle;
-                                      docId = AuthController.instance
-                                          .designationsListing[index].docId;
-                                      openEditPopUp();
-                                    },
-                                    child: Text(AppStrings.edit)),
+                                  onPressed: () {
+                                    designationController.text = AuthController.instance.designationsListing[index].designationTitle;
+                                    docId = AuthController.instance.designationsListing[index].docId;
+                                    openEditPopUp();
+                                  },
+                                  child: Text(
+                                    getString(context, "edit"),
+                                  ),
+                                ),
                                 TextButton(
-                                    onPressed: () {
-                                      AuthController.instance.deleteDesignation(
-                                          AuthController
-                                              .instance
-                                              .designationsListing[index]
-                                              .docId);
-                                    },
-                                    child: Text(AppStrings.delete))
+                                  onPressed: () {
+                                    AuthController.instance.deleteDesignation(AuthController.instance.designationsListing[index].docId);
+                                  },
+                                  child: Text(
+                                    getString(context, "delete"),
+                                  ),
+                                ),
                               ],
                             )
                           ],
@@ -161,8 +144,7 @@ class _DesignationsListingState extends State<DesignationsListing> {
                     separatorBuilder: (context, index) {
                       return const Divider();
                     },
-                    itemCount:
-                        AuthController.instance.designationsListing.length),
+                    itemCount: AuthController.instance.designationsListing.length),
               );
             }
           })
@@ -177,7 +159,7 @@ class _DesignationsListingState extends State<DesignationsListing> {
         context: context,
         builder: (ctx) => StatefulBuilder(
             builder: (ctx, setState) => AlertDialog(
-                  title: Text(AppStrings.designationTitle),
+                  title: Text(getString(context, "designation_title")),
                   content: Form(
                       key: formKey,
                       child: SizedBox(
@@ -186,13 +168,13 @@ class _DesignationsListingState extends State<DesignationsListing> {
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             TextFormFieldWidget(
-                                hintText: AppStrings.designationTitle,
+                                hintText: getString(context, "designation_title"),
                                 controller: addDesignationController,
                                 obscureText: false,
                                 textInputType: TextInputType.text,
                                 functionValidate: (designation) {
                                   if (designation!.isEmpty) {
-                                    return AppStrings.enterDesignation;
+                                    return getString(context, "validation_designation");
                                   }
                                 }),
                             SizedBox(
@@ -204,21 +186,14 @@ class _DesignationsListingState extends State<DesignationsListing> {
                                 TextButton(
                                     onPressed: () {
                                       if (formKey.currentState!.validate()) {
-                                        AuthController.instance.addDesignation(
-                                            addDesignationController.text
-                                                .trim());
+                                        AuthController.instance.addDesignation(addDesignationController.text.trim());
                                         Navigator.pop(context);
                                         addDesignationController.clear();
                                       }
                                     },
-                                    style: ButtonStyle(
-                                        padding: MaterialStateProperty.all(
-                                            const EdgeInsets.all(16)),
-                                        backgroundColor:
-                                            MaterialStateProperty.all(
-                                                Color(0xffff8dbb55))),
+                                    style: ButtonStyle(padding: MaterialStateProperty.all(const EdgeInsets.all(16)), backgroundColor: MaterialStateProperty.all(AppColor.appGreen)),
                                     child: TextWidget(
-                                      text: AppStrings.save,
+                                      text: getString(context, "save"),
                                       textColor: Colors.white,
                                       fontWeight: FontWeight.w500,
                                       fontSize: 16.0,
@@ -227,14 +202,9 @@ class _DesignationsListingState extends State<DesignationsListing> {
                                     onPressed: () {
                                       Navigator.pop(context);
                                     },
-                                    style: ButtonStyle(
-                                        padding: MaterialStateProperty.all(
-                                            EdgeInsets.all(16)),
-                                        backgroundColor:
-                                            MaterialStateProperty.all(
-                                                Color(0xFFff8dbb55))),
+                                    style: ButtonStyle(padding: MaterialStateProperty.all(const EdgeInsets.all(16)), backgroundColor: MaterialStateProperty.all(AppColor.appGreen)),
                                     child: TextWidget(
-                                      text: AppStrings.cancel,
+                                      text: getString(context, "cancel"),
                                       textColor: Colors.white,
                                       fontWeight: FontWeight.w500,
                                       fontSize: 16.0,
@@ -253,7 +223,7 @@ class _DesignationsListingState extends State<DesignationsListing> {
         context: context,
         builder: (ctx) => StatefulBuilder(
             builder: (ctx, setState) => AlertDialog(
-                  title: Text(AppStrings.designationTitle),
+                  title: Text(getString(context, "designation_title")),
                   content: Form(
                       key: formKey,
                       child: SizedBox(
@@ -262,14 +232,15 @@ class _DesignationsListingState extends State<DesignationsListing> {
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             TextFormFieldWidget(
-                                hintText: AppStrings.designationTitle,
+                                hintText: getString(context, "designation_title"),
                                 controller: designationController,
                                 obscureText: false,
                                 textInputType: TextInputType.text,
                                 functionValidate: (designation) {
                                   if (designation!.isEmpty) {
-                                    return AppStrings.enterDesignation;
+                                    return getString(context, "validation_designation");
                                   }
+                                  return null;
                                 }),
                             SizedBox(
                               height: Get.height * 0.020,
@@ -280,22 +251,13 @@ class _DesignationsListingState extends State<DesignationsListing> {
                                 TextButton(
                                     onPressed: () {
                                       if (formKey.currentState!.validate()) {
-                                        AuthController.instance
-                                            .updateDesignations(
-                                                designationController.text
-                                                    .trim(),
-                                                docId!);
+                                        AuthController.instance.updateDesignations(designationController.text.trim(), docId!);
                                         Navigator.pop(context);
                                       }
                                     },
-                                    style: ButtonStyle(
-                                        padding: MaterialStateProperty.all(
-                                            EdgeInsets.all(16)),
-                                        backgroundColor:
-                                            MaterialStateProperty.all(
-                                                Color(0xffff8dbb55))),
+                                    style: ButtonStyle(padding: MaterialStateProperty.all(const EdgeInsets.all(16)), backgroundColor: MaterialStateProperty.all(AppColor.appGreen)),
                                     child: TextWidget(
-                                      text: AppStrings.save,
+                                      text: getString(context, "save"),
                                       textColor: Colors.white,
                                       fontWeight: FontWeight.w500,
                                       fontSize: 16.0,
@@ -304,14 +266,9 @@ class _DesignationsListingState extends State<DesignationsListing> {
                                     onPressed: () {
                                       Navigator.pop(context);
                                     },
-                                    style: ButtonStyle(
-                                        padding: MaterialStateProperty.all(
-                                            EdgeInsets.all(16)),
-                                        backgroundColor:
-                                            MaterialStateProperty.all(
-                                                Color(0xFFff8dbb55))),
+                                    style: ButtonStyle(padding: MaterialStateProperty.all(const EdgeInsets.all(16)), backgroundColor: MaterialStateProperty.all(AppColor.appGreen)),
                                     child: TextWidget(
-                                      text: AppStrings.cancel,
+                                      text: getString(context, "cancel"),
                                       textColor: Colors.white,
                                       fontWeight: FontWeight.w500,
                                       fontSize: 16.0,

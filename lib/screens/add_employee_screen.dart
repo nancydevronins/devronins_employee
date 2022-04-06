@@ -1,15 +1,11 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:devronins_employeeee/constants/helper/app_helper.dart';
 import 'package:devronins_employeeee/controllers/firebase_auth_controller.dart';
 import 'package:devronins_employeeee/modals/services_modal.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
-import 'package:multi_select_flutter/chip_display/multi_select_chip_display.dart';
-import 'package:multi_select_flutter/dialog/multi_select_dialog_field.dart';
-import 'package:multi_select_flutter/util/multi_select_item.dart';
 
 import '../constants/colors.dart';
-import '../constants/strings.dart';
 import '../responsive_layout.dart';
 import '../widgets/resourses.dart';
 import '../widgets/sidebar.dart';
@@ -23,17 +19,16 @@ class AddEmployeeScreen extends StatefulWidget {
 
 class _AddEmployeeScreenState extends State<AddEmployeeScreen> {
   GlobalKey<FormState> formKey = GlobalKey();
-  final _multiSelectKey = GlobalKey<FormFieldState>();
 
   final TextEditingController firstNameController = TextEditingController();
   final TextEditingController latNameController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
 
-  FocusNode _firstNameField = new FocusNode();
-  FocusNode _lastNameField = new FocusNode();
-  FocusNode _passwordField = new FocusNode();
-  FocusNode _emailField = new FocusNode();
+  final FocusNode _firstNameField = FocusNode();
+  final FocusNode _lastNameField = FocusNode();
+  final FocusNode _passwordField = FocusNode();
+  final FocusNode _emailField = FocusNode();
 
   Designations? selectedDesignation;
 
@@ -52,11 +47,8 @@ class _AddEmployeeScreenState extends State<AddEmployeeScreen> {
     return Scaffold(
       backgroundColor: AppColor.scaffoldBackGroundColor,
       appBar: PreferredSize(
-        preferredSize: Size(double.infinity, 100),
-        child: (ResponsiveLayout.isTinyLimit(context) ||
-                ResponsiveLayout.isTinyHeightLimit(context)
-            ? Container()
-            : AppBar()),
+        preferredSize: const Size(double.infinity, 100),
+        child: (ResponsiveLayout.isTinyLimit(context) || ResponsiveLayout.isTinyHeightLimit(context) ? Container() : AppBar()),
       ),
       body: ResponsiveLayout(
         tiny: _addEmployeeForm(),
@@ -65,7 +57,7 @@ class _AddEmployeeScreenState extends State<AddEmployeeScreen> {
         phone: _addEmployeeForm(),
         tablet: _addEmployeeForm(),
       ),
-      drawer: SideBar(),
+      drawer: const SideBar(),
     );
   }
 
@@ -84,7 +76,7 @@ class _AddEmployeeScreenState extends State<AddEmployeeScreen> {
               child: Row(
                 children: [
                   TextWidget(
-                    text: AppStrings.addEmployee,
+                    text: getString(context, "add_employee"),
                     textColor: Colors.black,
                     fontSize: 14.0,
                     fontWeight: FontWeight.w600,
@@ -112,10 +104,10 @@ class _AddEmployeeScreenState extends State<AddEmployeeScreen> {
                           controller: firstNameController,
                           obscureText: false,
                           textInputType: TextInputType.name,
-                          hintText: AppStrings.firstName,
+                          hintText: getString(context, "first_name"),
                           functionValidate: (name) {
                             if (name!.isEmpty) {
-                              return "please enter the First Name";
+                              return getString(context, "validation_first_name");
                             }
                           },
                         ),
@@ -128,11 +120,12 @@ class _AddEmployeeScreenState extends State<AddEmployeeScreen> {
                           controller: latNameController,
                           obscureText: false,
                           textInputType: TextInputType.name,
-                          hintText: AppStrings.lastName,
+                          hintText: getString(context, "last_name"),
                           functionValidate: (name) {
                             if (name!.isEmpty) {
-                              return "please enter the Last Name";
+                              return getString(context, "validation_last_name");
                             }
+                            return null;
                           },
                         ),
                         SizedBox(
@@ -144,16 +137,12 @@ class _AddEmployeeScreenState extends State<AddEmployeeScreen> {
                           controller: emailController,
                           obscureText: false,
                           textInputType: TextInputType.emailAddress,
-                          hintText: AppStrings.email,
+                          hintText: getString(context, "email"),
                           functionValidate: (email) {
-                            const pattern1 =
-                                r'^[a-zA-Z0-9._]+@[a-zA-Z0-9]+\.[a-zA-Z]+';
-                            final regExp = RegExp(pattern1);
-                            if (email!.isEmpty) {
-                              return "please enter the Email";
-                            } else if (!regExp.hasMatch(email)) {
-                              return "please enter the valid email address";
+                            if (!isValidEmail(email)) {
+                              return getString(context, "validation_email");
                             }
+                            return null;
                           },
                         ),
                         SizedBox(
@@ -165,43 +154,43 @@ class _AddEmployeeScreenState extends State<AddEmployeeScreen> {
                           controller: passwordController,
                           obscureText: false,
                           textInputType: TextInputType.visiblePassword,
-                          hintText: AppStrings.password,
+                          hintText: getString(context, "password"),
                           functionValidate: (password) {
-                            if (password!.isEmpty) {
-                              return "please enter the Password";
-                            } else if (password.length < 6) {
-                              return "password should be greater then six";
+                            if (isValidPasswordLength(password)) {
+                              return getString(context, "validation_password_length");
                             }
+                            return null;
                           },
                         ),
                         SizedBox(
                           height: Get.height * 0.030,
                         ),
                         Container(
-                            margin:
-                                const EdgeInsets.only(left: 10.0, right: 10.0),
+                            margin: const EdgeInsets.only(left: 10.0, right: 10.0),
                             child: DropdownButtonFormField<Designations>(
-                              validator: (value) =>
-                                  value == null ? 'field required' : null,
+                              validator: (value) => value == null ? 'field required' : null,
                               isExpanded: false,
-                              hint: Container(
+                              hint: const SizedBox(
                                 width: 150, //and here
-                                child: const Text(
+                                child: Text(
                                   "Select Item Type",
                                   style: TextStyle(color: Colors.grey),
                                   textAlign: TextAlign.end,
                                 ),
                               ),
                               items: AuthController.instance.designationsListing
-                                  .map((element) =>
-                                      DropdownMenuItem<Designations>(
-                                          value: element,
-                                          child: Container(
-                                              width: 150,
-                                              child: Text(
-                                                element.designationTitle,
-                                                textAlign: TextAlign.end,
-                                              ))))
+                                  .map(
+                                    (element) => DropdownMenuItem<Designations>(
+                                      value: element,
+                                      child: SizedBox(
+                                        width: 150,
+                                        child: Text(
+                                          element.designationTitle,
+                                          textAlign: TextAlign.end,
+                                        ),
+                                      ),
+                                    ),
+                                  )
                                   .toList(),
                               value: selectedDesignation,
                               onChanged: (value) {
@@ -219,21 +208,12 @@ class _AddEmployeeScreenState extends State<AddEmployeeScreen> {
                             TextButton(
                                 onPressed: () {
                                   if (formKey.currentState!.validate()) {
-                                    AuthController.instance.addEmployee(
-                                        firstNameController.text.trim(),
-                                        latNameController.text.trim(),
-                                        emailController.text.trim(),
-                                        passwordController.text.trim(),
-                                        selectedDesignation!);
+                                    AuthController.instance.addEmployee(firstNameController.text.trim(), latNameController.text.trim(), emailController.text.trim(), passwordController.text.trim(), selectedDesignation!);
                                   }
                                 },
-                                style: ButtonStyle(
-                                    padding: MaterialStateProperty.all(
-                                        const EdgeInsets.all(16)),
-                                    backgroundColor: MaterialStateProperty.all(
-                                        Color(0xFFff8dbb55))),
+                                style: ButtonStyle(padding: MaterialStateProperty.all(const EdgeInsets.all(16)), backgroundColor: MaterialStateProperty.all(const Color(0xFFff8dbb55))),
                                 child: TextWidget(
-                                  text: AppStrings.save,
+                                  text: getString(context, "save"),
                                   textColor: Colors.white,
                                   fontWeight: FontWeight.w500,
                                   fontSize: 16.0,
@@ -242,13 +222,9 @@ class _AddEmployeeScreenState extends State<AddEmployeeScreen> {
                                 onPressed: () {
                                   Get.toNamed("/welcome");
                                 },
-                                style: ButtonStyle(
-                                    padding: MaterialStateProperty.all(
-                                        const EdgeInsets.all(16)),
-                                    backgroundColor: MaterialStateProperty.all(
-                                        Color(0xFFff8dbb55))),
+                                style: ButtonStyle(padding: MaterialStateProperty.all(const EdgeInsets.all(16)), backgroundColor: MaterialStateProperty.all(const Color(0xFFff8dbb55))),
                                 child: TextWidget(
-                                  text: AppStrings.cancel,
+                                  text: getString(context, "cancel"),
                                   textColor: Colors.white,
                                   fontWeight: FontWeight.w500,
                                   fontSize: 16.0,
