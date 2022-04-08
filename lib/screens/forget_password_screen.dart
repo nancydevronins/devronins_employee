@@ -1,33 +1,22 @@
 import 'package:devronins_employeeee/controllers/firebase_auth_controller.dart';
-import 'package:devronins_employeeee/screens/signup_screen.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import 'package:flutter/painting.dart';
 import '../constants/colors.dart';
 import '../constants/strings.dart';
 import '../responsive_layout.dart';
 import '../widgets/resourses.dart';
-import 'package:get/get.dart';
 
-import 'forget_password_screen.dart';
-
-class LoginScreen extends StatefulWidget {
-  const LoginScreen({Key? key}) : super(key: key);
+class ForgetPasswordScreen extends StatefulWidget {
+  const ForgetPasswordScreen({Key? key}) : super(key: key);
 
   @override
-  _LoginScreenState createState() => _LoginScreenState();
+  _ForgetPasswordScreenState createState() => _ForgetPasswordScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
   GlobalKey<FormState> formKey = GlobalKey();
   final TextEditingController emailController = TextEditingController();
-  final TextEditingController passwordController = TextEditingController();
-
   final FocusNode emailFocus = FocusNode();
-  final FocusNode passwordFocus = FocusNode();
-
-  late bool _visiblePassword = true;
 
   @override
   Widget build(BuildContext context) {
@@ -78,7 +67,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     width: 500,
                     child: TextFormFieldWidget(
                       focusNodeCurrent: emailFocus,
-                      focusNodeNext: passwordFocus,
+                      focusNodeNext: emailFocus,
                       controller: emailController,
                       obscureText: false,
                       textInputType: TextInputType.emailAddress,
@@ -98,59 +87,8 @@ class _LoginScreenState extends State<LoginScreen> {
                   const SizedBox(
                     height: 20,
                   ),
-                  SizedBox(
-                    width: 500,
-                    child: TextFormFieldWidget(
-                      focusNodeCurrent: passwordFocus,
-                      focusNodeNext: passwordFocus,
-                      controller: passwordController,
-                      obscureText: !_visiblePassword,
-                      textInputType: TextInputType.visiblePassword,
-                      hintText: "Password:",
-                      functionValidate: (password) {
-                        if (password!.isEmpty) {
-                          return "plaese enter the password";
-                        } else if (password.length < 6) {
-                          return "Password should be greater then six";
-                        }
-                      },
-                      suffixIcon: InkWell(
-                        onTap: () {
-                          setState(() {
-                            _visiblePassword = !_visiblePassword;
-                          });
-                        },
-                        child: Icon(
-                          _visiblePassword
-                              ? Icons.visibility_off
-                              : Icons.visibility,
-                          color: Colors.grey,
-                        ),
-                      ),
-                    ),
-                  ),
                   const SizedBox(
                     height: 10,
-                  ),
-                  SizedBox(
-                    width: 500,
-                    child: Align(
-                      alignment: Alignment.bottomRight,
-                      child: TextButton(
-                        onPressed: () {
-                          Get.to(ForgetPasswordScreen());
-                        },
-                        child: const TextWidget(
-                          fontSize: 14,
-                          fontWeight: FontWeight.bold,
-                          text: 'Forget Password',
-                          textColor: Colors.grey,
-                        ),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 20,
                   ),
                   SizedBox(
                     width: 500,
@@ -162,38 +100,20 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                       onPressed: () {
                         if (formKey.currentState!.validate()) {
-                          AuthController.instance.loginUser(
-                              emailController.text.trim(),
-                              passwordController.text.trim());
+                          AuthController.instance.sendResetPasswordEmail(
+                              emailController.text.trim());
                         }
                       },
                       child: const TextWidget(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
-                        text: 'Submit',
+                        text: 'Reset Password',
                         textColor: Colors.white,
                       ),
                     ),
                   ),
                   const SizedBox(
                     height: 50,
-                  ),
-                  SizedBox(
-                    width: 500,
-                    child: Align(
-                      alignment: Alignment.center,
-                      child: TextButton(
-                        onPressed: () {
-                          Get.to(const SignupScreen());
-                        },
-                        child: const TextWidget(
-                          fontSize: 14,
-                          fontWeight: FontWeight.bold,
-                          text: 'Create Account',
-                          textColor: Color(0xFFff52a3d8),
-                        ),
-                      ),
-                    ),
                   ),
                 ],
               ),
