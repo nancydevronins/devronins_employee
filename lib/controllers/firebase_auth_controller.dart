@@ -126,4 +126,11 @@ class AuthController extends GetxController {
   Future<void> logOut() async {
     auth.signOut();
   }
+
+  Future<void> sendResetPasswordEmail(String email) async {
+    await auth.sendPasswordResetEmail(email: email).then((value) {
+      Get.offAll(LoginScreen());
+      Get.snackbar("Password Reset email link is been send", "Success");
+    });
+  }
 }
