@@ -1,8 +1,8 @@
+import 'package:devronins_employeeee/constants/helper/app_helper.dart';
 import 'package:devronins_employeeee/controllers/firebase_auth_controller.dart';
 import 'package:flutter/material.dart';
 
 import '../constants/colors.dart';
-import '../constants/strings.dart';
 import '../responsive_layout.dart';
 import '../widgets/resourses.dart';
 
@@ -46,8 +46,8 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
               child: Column(
                 children: [
                   TextWidget(
-                    text: AppStrings.logIn,
-                    textColor: Color(0xFFff52a3d8),
+                    text: getString(context, "login"),
+                    textColor: AppColor.appBlue,
                     fontSize: 30,
                     fontWeight: FontWeight.bold,
                   ),
@@ -55,8 +55,8 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
                     height: 20,
                   ),
                   TextWidget(
-                    text: AppStrings.logInSubHeading,
-                    textColor: Color(0xFFff52a3d8),
+                    text: getString(context, "login_sub_heading"),
+                    textColor: AppColor.appBlue,
                     fontSize: 20,
                     fontWeight: FontWeight.w500,
                   ),

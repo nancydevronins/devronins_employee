@@ -85,8 +85,7 @@ class TextFormFieldWidget extends StatelessWidget {
 class SideBarMenuItems {
   String title;
   IconData icon;
-  String route;
-
+  Widget route;
   SideBarMenuItems({required this.title, required this.icon, required this.route});
 }
 
@@ -115,5 +114,25 @@ Widget space({double width = 0, double height = 0}) {
   return SizedBox(
     width: width,
     height: height,
+  );
+}
+
+Widget shadowContainer({required Widget child}) {
+  return Container(
+    width: double.infinity,
+    height: double.infinity,
+    margin: const EdgeInsets.all(50),
+    decoration: BoxDecoration(
+      color: Colors.white,
+      shape: BoxShape.rectangle,
+      borderRadius: BorderRadius.circular(10),
+      boxShadow: const [
+        BoxShadow(
+          color: Colors.grey,
+          blurRadius: 20.0,
+        ),
+      ],
+    ),
+    child: child,
   );
 }

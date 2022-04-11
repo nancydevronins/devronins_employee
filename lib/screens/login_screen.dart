@@ -1,6 +1,6 @@
 import 'package:devronins_employeeee/constants/helper/app_helper.dart';
 import 'package:devronins_employeeee/controllers/firebase_auth_controller.dart';
-import 'package:devronins_employeeee/screens/welcome_screen.dart';
+import 'package:devronins_employeeee/screens/home.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -42,21 +42,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   Widget container() {
     return Center(
-      child: Container(
-        width: double.infinity,
-        height: double.infinity,
-        margin: const EdgeInsets.all(50),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          shape: BoxShape.rectangle,
-          borderRadius: BorderRadius.circular(10),
-          boxShadow: const [
-            BoxShadow(
-              color: Colors.grey,
-              blurRadius: 20.0,
-            ),
-          ],
-        ),
+      child: shadowContainer(
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 100),
           child: Form(
@@ -93,7 +79,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       hintText: getString(context, "email"),
                       errorText: emailError,
                       onChanged: (value) {
-                        if(emailError != null && value.toString().isNotEmpty) {
+                        if (emailError != null && value.toString().isNotEmpty) {
                           setState(() {
                             emailError = null;
                           });
@@ -121,7 +107,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       hintText: getString(context, "password"),
                       errorText: passwordError,
                       onChanged: (value) {
-                        if(passwordError != null && value.toString().isNotEmpty) {
+                        if (passwordError != null && value.toString().isNotEmpty) {
                           setState(() {
                             passwordError = null;
                           });
@@ -186,7 +172,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             handleFirebaseExceptions(result);
                           } else if (result is UserCredential && result.user != null) {
                             showTopSnackBar(context, message: "Logged In Successfully!");
-                            openPage(context, const WelcomeScreen());
+                            Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (BuildContext context) => const HomePage()), ModalRoute.withName('/'));
                           }
                         }
                       },
@@ -240,11 +226,17 @@ class _LoginScreenState extends State<LoginScreen> {
         builder: (context) {
           return StatefulBuilder(builder: (context, StateSetter setState) {
             return AlertDialog(
-              title: Text(getString(context, "forgot_password"), style: appSemiBoldTextStyle(fontSize: 16),),
+              title: Text(
+                getString(context, "forgot_password"),
+                style: appSemiBoldTextStyle(fontSize: 16),
+              ),
               content: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Text(getString(context, "enter_email_for_forgot_password"), style: appRegularTextStyle(fontSize: 12, color: AppColor.color818181),),
+                  Text(
+                    getString(context, "enter_email_for_forgot_password"),
+                    style: appRegularTextStyle(fontSize: 12, color: AppColor.color818181),
+                  ),
                   space(height: 4),
                   TextFormFieldWidget(
                     controller: emailController,
@@ -254,7 +246,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     errorText: emailError,
                     textStyle: appRegularTextStyle(fontSize: 16),
                     onChanged: (value) {
-                      if(emailError != null && value.toString().isNotEmpty) {
+                      if (emailError != null && value.toString().isNotEmpty) {
                         print('Entered value: $value');
                         setState(() {
                           print('Entered value****: $value');
@@ -277,12 +269,15 @@ class _LoginScreenState extends State<LoginScreen> {
                     sendEmail = false;
                     Navigator.pop(context);
                   },
-                  child: Text(getString(context, "cancel"), style: appRegularTextStyle(fontSize: 16),),
+                  child: Text(
+                    getString(context, "cancel"),
+                    style: appRegularTextStyle(fontSize: 16),
+                  ),
                 ),
                 TextButton(
                   onPressed: () {
-                    if(!isValidEmail(emailController.text.trim())) {
-                      setState((){
+                    if (!isValidEmail(emailController.text.trim())) {
+                      setState(() {
                         emailError = getString(context, "validation_email");
                       });
                     } else {
@@ -290,21 +285,22 @@ class _LoginScreenState extends State<LoginScreen> {
                       Navigator.pop(context);
                     }
                   },
-                  child: Text(getString(context, "send"), style: appRegularTextStyle(fontSize: 16),),
+                  child: Text(
+                    getString(context, "send"),
+                    style: appRegularTextStyle(fontSize: 16),
+                  ),
                 ),
               ],
             );
           });
         }).then((value) async {
-        if(sendEmail) {
-          sendEmail = false;
-          progressDialog(true, context);
-          await FirebaseAuth.instance.sendPasswordResetEmail(email: emailController.text.trim());
-          progressDialog(false, context);
-          showTopSnackBar(context, message: getString(context, "reset_password_link_sent"));
-        }
+      if (sendEmail) {
+        sendEmail = false;
+        progressDialog(true, context);
+        await FirebaseAuth.instance.sendPasswordResetEmail(email: emailController.text.trim());
+        progressDialog(false, context);
+        showTopSnackBar(context, message: getString(context, "reset_password_link_sent"));
+      }
     });
-
   }
-
 }

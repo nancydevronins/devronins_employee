@@ -1,83 +1,31 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:devronins_employeeee/controllers/firebase_auth_controller.dart';
 import 'package:devronins_employeeee/responsive_layout.dart';
-import 'package:devronins_employeeee/widgets/resourses.dart';
-import 'package:devronins_employeeee/widgets/sidebar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../constants/colors.dart';
 
 class WelcomeScreen extends StatefulWidget {
+
   const WelcomeScreen({Key? key}) : super(key: key);
 
   @override
   _WelcomeScreenState createState() => _WelcomeScreenState();
+
 }
 
 class _WelcomeScreenState extends State<WelcomeScreen> {
+
   @override
   void initState() {
     AuthController.instance.designations();
-
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: PreferredSize(
-        preferredSize: Size(double.infinity, 100),
-        child: (ResponsiveLayout.isTinyLimit(context) ||
-                ResponsiveLayout.isTinyHeightLimit(context)
-            ? Container()
-            : AppBar(
-                title: const Padding(
-                  padding: EdgeInsets.only(top: 30),
-                  child: Text(
-                    "DevRonins",
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 22,
-                      fontWeight: FontWeight.w700,
-                    ),
-                  ),
-                ),
-                actions: [
-                  Padding(
-                    padding: EdgeInsets.only(top: 30, right: 30),
-                    child: PopupMenuButton(
-                        icon: Icon(Icons.person),
-                        itemBuilder: (context) => [
-                              PopupMenuItem(
-                                child: TextButton(
-                                  onPressed: () {
-                                    Get.toNamed('/userProfile');
-                                  },
-                                  child: const Text(
-                                    "Profile",
-                                    style: TextStyle(color: Colors.black),
-                                  ),
-                                ),
-                                value: 1,
-                              ),
-                              PopupMenuItem(
-                                child: TextButton(
-                                  onPressed: () {
-                                    AuthController.instance.logOut();
-                                  },
-                                  child: const Text(
-                                    "Log Out",
-                                    style: TextStyle(color: Colors.black),
-                                  ),
-                                ),
-                                value: 2,
-                              )
-                            ]),
-                  )
-                ],
-              )),
-      ),
       backgroundColor: AppColor.scaffoldBackGroundColor,
       body: Center(
         child: InkWell(
@@ -136,7 +84,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
           ),
         ),
       ),
-      drawer: const SideBar(),
     );
   }
+
 }

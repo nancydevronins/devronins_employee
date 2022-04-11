@@ -8,7 +8,6 @@ import 'package:get/get_core/src/get_main.dart';
 import '../constants/colors.dart';
 import '../responsive_layout.dart';
 import '../widgets/resourses.dart';
-import '../widgets/sidebar.dart';
 
 class AddEmployeeScreen extends StatefulWidget {
   const AddEmployeeScreen({Key? key}) : super(key: key);
@@ -57,7 +56,6 @@ class _AddEmployeeScreenState extends State<AddEmployeeScreen> {
         phone: _addEmployeeForm(),
         tablet: _addEmployeeForm(),
       ),
-      drawer: const SideBar(),
     );
   }
 

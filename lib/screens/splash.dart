@@ -1,5 +1,6 @@
 import 'package:after_layout/after_layout.dart';
 import 'package:devronins_employeeee/constants/helper/app_helper.dart';
+import 'package:devronins_employeeee/screens/home.dart';
 import 'package:devronins_employeeee/screens/login_screen.dart';
 import 'package:devronins_employeeee/screens/welcome_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -19,13 +20,15 @@ class SplashScreen extends StatefulWidget {
 class SplashState extends State<SplashScreen> with AfterLayoutMixin<SplashScreen> {
 
   @override
-  void afterFirstLayout(BuildContext context) {
+  void afterFirstLayout(BuildContext context) async {
     User? user = FirebaseAuth.instance.currentUser;
+    print("App user: $user");
     Future.delayed(const Duration(seconds: 1), () {
+      Navigator.pop(context);
       if(user == null) {
-        openPage(context, const LoginScreen());
+        Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (BuildContext context) => const LoginScreen()), ModalRoute.withName('/'));
       } else {
-        openPage(context, const WelcomeScreen());
+        Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (BuildContext context) => const HomePage()), ModalRoute.withName('/'));
       }
     });
   }

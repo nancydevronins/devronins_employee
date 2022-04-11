@@ -9,6 +9,10 @@ class AppStrings {
 
   final Map<String, String> _localizedStrings = {
     "app_name": "DevRonins",
+    "dashboard": "Dashboard",
+    "employees": "Employees",
+    "designations": "Designations",
+    "departments": "Departments",
     "select_designations": "Select Designations",
     "create_account": "Create Account",
     "submit": "Submit",
@@ -30,20 +34,21 @@ class AppStrings {
     "edit": "Edit",
     "delete": "Delete",
     "send": "Send",
-    "designations": "Designations",
     "add_designation": "Add Designation",
     "title": "Title",
     "actions": "Actions",
-    "designation_title": "Designation Title",
     "validation_designation": "Enter Designation",
     "please_wait": "Please Wait...",
     "user_not_found": "There is no user associated with this email",
     "wrong-password": "You have entered wrong password",
     "enter_email_for_forgot_password": "Enter your email below to get reset password link",
-    "reset_password_link_sent": "We have sent reset password link to given email."
+    "reset_password_link_sent": "We have sent reset password link to given email.",
+    "enter_designation_title": "Enter Designation Title",
+    "designation": "Designation"
   };
 
   String translate(String key) {
     return _localizedStrings[key] ?? 'No Key Available';
   }
+
 }

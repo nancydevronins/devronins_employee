@@ -8,7 +8,6 @@ import 'package:get/get.dart';
 import '../constants/colors.dart';
 import '../modals/services_modal.dart';
 import '../responsive_layout.dart';
-import '../widgets/sidebar.dart';
 
 class EmployeeScreen extends StatefulWidget {
   const EmployeeScreen({Key? key}) : super(key: key);
@@ -37,13 +36,6 @@ class _EmployeeScreenState extends State<EmployeeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColor.scaffoldBackGroundColor,
-      appBar: PreferredSize(
-        preferredSize: const Size(double.infinity, 100),
-        child: (ResponsiveLayout.isTinyLimit(context) ||
-                ResponsiveLayout.isTinyHeightLimit(context)
-            ? Container()
-            : AppBar()),
-      ),
       body: ResponsiveLayout(
         tiny: _employeeDetails(),
         largeTablet: _employeeDetails(),
@@ -51,7 +43,6 @@ class _EmployeeScreenState extends State<EmployeeScreen> {
         phone: _employeeDetails(),
         tablet: _employeeDetails(),
       ),
-      drawer: const SideBar(),
     );
   }
 

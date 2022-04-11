@@ -3,6 +3,10 @@ import 'package:devronins_employeeee/constants/colors.dart';
 import 'package:devronins_employeeee/constants/strings.dart';
 import 'package:flutter/material.dart';
 
+class FirebaseConstants {
+  static String table_designations = "designations";
+}
+
 Future<dynamic> openPage(BuildContext context, Widget page) async {
   final result = await Navigator.push(
     context,
