@@ -1,3 +1,4 @@
+import 'package:devroninsemployees/constants/strings.dart';
 import 'package:get/get.dart';
 
 class LoginPageController extends GetxController {
@@ -7,13 +8,35 @@ class LoginPageController extends GetxController {
   RxString email = ''.obs;
   RxString password = ''.obs;
   RxString confirmPassword = ''.obs;
+  RxBool isEnableNextButton = true.obs;
+  var selectedDropdown = Strings.associate.obs;
+  List dropdownTextList = [
+    Strings.associate,
+    Strings.srAssociate,
+    Strings.softwareEngineer,
+    Strings.srSoftwareEngineer,
+    Strings.teamLead,
+    Strings.projectManager,
+  ];
 
-  void enableSignUp() {
+  void toggleSignUp() {
     isEnableSignUp.value = !isEnableSignUp.value;
+    email = ''.obs;
+    password = ''.obs;
+    confirmPassword = ''.obs;
     update();
   }
 
-  void enablePassword() {
+  void toggleNextButton() {
+    isEnableNextButton.value = !isEnableNextButton.value;
+    update();
+  }
+
+  void dropDownValueChange(String value) {
+    selectedDropdown.value = value;
+  }
+
+  void togglePassword() {
     isVisiblePassword.value = !isVisiblePassword.value;
     update();
   }

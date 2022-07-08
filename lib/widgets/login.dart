@@ -1,11 +1,12 @@
+import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:devroninsemployees/constants/colors.dart';
 import 'package:devroninsemployees/constants/strings.dart';
 import 'package:devroninsemployees/controllers/auth_controller.dart';
 import 'package:devroninsemployees/controllers/login_page_controller.dart';
+import 'package:devroninsemployees/utils/flash_message.dart';
 import 'package:devroninsemployees/utils/responsive_layout.dart';
 import 'package:devroninsemployees/utils/wave_loading.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/get.dart';
 
 class Login extends StatelessWidget {
@@ -59,7 +60,13 @@ class Login extends StatelessWidget {
   InkWell loginButton(context) {
     return InkWell(
         onTap: () {
-          AuthController.instance.loginUser(LoginPageController.instance.email.value, LoginPageController.instance.password.value, context);
+          if (!LoginPageController.instance.email.contains(Strings.emailValidation)) {
+            FlashMessage.showFlashMessage(
+                title: Strings.error, message: Strings.invalidDevroninsEmail, contentType: ContentType.help, context: context);
+          } else {
+            AuthController.instance
+                .loginUser(LoginPageController.instance.email.value.trim(), LoginPageController.instance.password.value.trim(), context);
+          }
         },
         child: Container(
           width: 120,
@@ -101,7 +108,7 @@ class Login extends StatelessWidget {
                 suffixIcon: IconButton(
                   icon: Icon(LoginPageController.instance.isVisiblePassword.value ? Icons.visibility_off : Icons.visibility),
                   onPressed: () {
-                    LoginPageController.instance.enablePassword();
+                    LoginPageController.instance.togglePassword();
                   },
                 )),
           )),

@@ -1,3 +1,6 @@
+import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:devroninsemployees/constants/strings.dart';
 import 'package:devroninsemployees/routes/routes.dart';
 import 'package:devroninsemployees/utils/flash_message.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -8,8 +11,9 @@ class AuthController extends GetxController {
   static AuthController instance = Get.find();
   late Rx<User?> user;
   FirebaseAuth auth = FirebaseAuth.instance;
+  FirebaseFirestore fireStore = FirebaseFirestore.instance;
   RxBool isLoading = false.obs;
-
+  RxString role = ''.obs;
   @override
   void onReady() {
     super.onReady();
@@ -21,6 +25,8 @@ class AuthController extends GetxController {
   _initialScreen(User? user) {
     if (user == null) {
       Get.offAllNamed(RoutesClass.loginPage);
+    } else if (role.value == Strings.roleAdmin) {
+      Get.offAllNamed(RoutesClass.adminHome);
     } else {
       Get.offAllNamed(RoutesClass.home);
     }
@@ -29,11 +35,15 @@ class AuthController extends GetxController {
   void registerUser(String email, String password, BuildContext context) async {
     try {
       isLoading(true);
-      await auth.createUserWithEmailAndPassword(email: email, password: password);
+      await auth.createUserWithEmailAndPassword(email: email, password: password).then((value) {
+        FlashMessage.showFlashMessage(
+            title: Strings.signUpSuccess, message: Strings.withEmail + email, contentType: ContentType.success, context: context);
+      });
       isLoading(false);
     } on FirebaseAuthException catch (e) {
       isLoading(false);
-      print("Error:$e");
+      FlashMessage.showFlashMessage(
+          title: e.toString().substring(15, 28), message: e.message.toString(), contentType: ContentType.failure, context: context);
     }
     update();
   }
@@ -41,12 +51,17 @@ class AuthController extends GetxController {
   void loginUser(String email, String password, BuildContext context) async {
     try {
       isLoading(true);
-      await auth.signInWithEmailAndPassword(email: email, password: password);
+      await auth.signInWithEmailAndPassword(email: email, password: password).then((value) {
+        fireStore.collection(Strings.users).doc(value.user!.uid).get().then((usersData) => role.value = usersData.get(Strings.roleAdmin));
+        print('role:${role}');
+        FlashMessage.showFlashMessage(
+            title: Strings.loginSuccess, message: Strings.withEmail + email, contentType: ContentType.success, context: context);
+      });
       isLoading(false);
     } on FirebaseAuthException catch (e) {
       isLoading(false);
-      FlashMessage.showFlashMessage("message", "messageDetail", context);
-      print("Error:$e");
+      FlashMessage.showFlashMessage(
+          title: e.toString().substring(15, 28), message: e.message.toString(), contentType: ContentType.failure, context: context);
     }
     update();
   }

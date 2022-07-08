@@ -32,7 +32,7 @@ class LoginPage extends StatelessWidget {
                       LoginPageController.instance.isEnableSignUp.value ? SignUp() : Login(),
                       TextButton(
                           onPressed: () {
-                            LoginPageController.instance.enableSignUp();
+                            LoginPageController.instance.toggleSignUp();
                           },
                           child: Text(LoginPageController.instance.isEnableSignUp.value ? Strings.alreadyHaveAnAccount : Strings.newUserSignupHere))
                     ],
