@@ -21,10 +21,10 @@ class RoutesClass {
     GetPage(name: home, page: () => const HomePage()),
     GetPage(name: landingPage, page: () => const LandingPage()),
     GetPage(
-        name: loginPage,
-        page: () => LoginPage(),
-        transition: Transition.fadeIn,
-        binding: BindingsBuilder(() => Get.lazyPut(() => LoginPageController()))),
+      name: loginPage,
+      page: () => LoginPage(),
+      transition: Transition.fadeIn,
+    ),
     GetPage(
       name: adminHome,
       page: () => AdminHomePage(),

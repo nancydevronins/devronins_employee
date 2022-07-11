@@ -22,13 +22,11 @@ class AuthController extends GetxController {
     ever(user, _initialScreen);
   }
 
-  _initialScreen(User? user) {
+  _initialScreen(User? user) async {
     if (user == null) {
       Get.offAllNamed(RoutesClass.loginPage);
-    } else if (role.value == Strings.roleAdmin) {
-      Get.offAllNamed(RoutesClass.adminHome);
-    } else {
-      Get.offAllNamed(RoutesClass.home);
+    } else if (role.value.isEmpty) {
+      getUserRole(user.uid);
     }
   }
 
@@ -51,9 +49,8 @@ class AuthController extends GetxController {
   void loginUser(String email, String password, BuildContext context) async {
     try {
       isLoading(true);
-      await auth.signInWithEmailAndPassword(email: email, password: password).then((value) {
-        fireStore.collection(Strings.users).doc(value.user!.uid).get().then((usersData) => role.value = usersData.get(Strings.roleAdmin));
-        print('role:${role}');
+      await auth.signInWithEmailAndPassword(email: email, password: password).then((value) async {
+        await getUserRole(value.user!.uid);
         FlashMessage.showFlashMessage(
             title: Strings.loginSuccess, message: Strings.withEmail + email, contentType: ContentType.success, context: context);
       });
@@ -64,5 +61,21 @@ class AuthController extends GetxController {
           title: e.toString().substring(15, 28), message: e.message.toString(), contentType: ContentType.failure, context: context);
     }
     update();
+  }
+
+  getUserRole(uid) async {
+    await fireStore.collection(Strings.users).doc(uid).get().then((value) {
+      role.value = value.get(Strings.role);
+    });
+    if (role.value == Strings.roleAdmin) {
+      Get.offAllNamed(RoutesClass.adminHome);
+    } else {
+      Get.offAllNamed(RoutesClass.home);
+    }
+    print("ROle:$role");
+  }
+
+  void logout() async {
+    auth.signOut();
   }
 }

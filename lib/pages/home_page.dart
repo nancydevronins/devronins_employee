@@ -1,3 +1,4 @@
+import 'package:devroninsemployees/controllers/auth_controller.dart';
 import 'package:flutter/material.dart';
 
 class HomePage extends StatelessWidget {
@@ -6,8 +7,17 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: Text('Homepage'),
+      body: Column(
+        children: [
+          Center(
+            child: Text('Homepage'),
+          ),
+          ElevatedButton(
+              onPressed: () {
+                AuthController.instance.logout();
+              },
+              child: Text('Log'))
+        ],
       ),
     );
   }

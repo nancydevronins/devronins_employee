@@ -35,6 +35,7 @@ class Strings {
   static const String teamLead = 'Team Lead';
   static const String projectManager = 'Project Manager';
   static const String selectDesignation = 'Select designation';
+  static const String role = 'role';
   static const String roleAdmin = 'admin';
   static const String roleEmployee = 'employee';
   static const String users = 'users';
