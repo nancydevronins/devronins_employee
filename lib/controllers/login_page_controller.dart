@@ -9,6 +9,9 @@ class LoginPageController extends GetxController {
   RxString password = ''.obs;
   RxString confirmPassword = ''.obs;
   RxBool isEnableNextButton = true.obs;
+  RxString firstName = ''.obs;
+  RxString lastName = ''.obs;
+  RxString phoneNumber = ''.obs;
   var selectedDropdown = Strings.associate.obs;
   List dropdownTextList = [
     Strings.associate,

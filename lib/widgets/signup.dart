@@ -93,7 +93,42 @@ class SignUp extends StatelessWidget {
   Obx nextBtn(context) {
     return Obx(() => InkWell(
         onTap: () {
-          LoginPageController.instance.toggleNextButton();
+          if (!LoginPageController.instance.email.contains(Strings.emailValidation)) {
+            FlashMessage.showFlashMessage(
+                title: Strings.error, message: Strings.invalidDevroninsEmail, contentType: ContentType.help, context: context);
+          } else if (LoginPageController.instance.password.isEmpty) {
+            FlashMessage.showFlashMessage(
+                title: Strings.error, message: Strings.passwordRequired, contentType: ContentType.failure, context: context);
+          } else if (LoginPageController.instance.confirmPassword.isEmpty) {
+            FlashMessage.showFlashMessage(
+                title: Strings.error, message: Strings.enterConfirmPassword, contentType: ContentType.failure, context: context);
+          } else if (LoginPageController.instance.password.value.trim() != LoginPageController.instance.confirmPassword.trim()) {
+            FlashMessage.showFlashMessage(
+                title: Strings.error, message: Strings.passwordDonotMatch, contentType: ContentType.failure, context: context);
+          } else if (!LoginPageController.instance.isEnableNextButton.value) {
+            if (LoginPageController.instance.firstName.isEmpty) {
+              FlashMessage.showFlashMessage(
+                  title: Strings.error, message: Strings.firstNameRequired, contentType: ContentType.failure, context: context);
+            } else if (LoginPageController.instance.lastName.isEmpty) {
+              FlashMessage.showFlashMessage(
+                  title: Strings.error, message: Strings.lastNameRequired, contentType: ContentType.failure, context: context);
+            } else if (LoginPageController.instance.phoneNumber.isEmpty) {
+              FlashMessage.showFlashMessage(
+                  title: Strings.error, message: Strings.phoneNumberRequired, contentType: ContentType.failure, context: context);
+            } else {
+              AuthController.instance.registerUser(
+                  LoginPageController.instance.email.value.trim(),
+                  LoginPageController.instance.password.value.trim(),
+                  LoginPageController.instance.firstName.value,
+                  LoginPageController.instance.lastName.value,
+                  LoginPageController.instance.phoneNumber.value,
+                  LoginPageController.instance.selectedDropdown.value,
+                  context);
+            }
+          } else {
+            LoginPageController.instance.toggleNextButton();
+          }
+
           // if (LoginPageController.instance.password.value.trim() != LoginPageController.instance.confirmPassword.trim()) {
           //   FlashMessage.showFlashMessage(
           //       message: Strings.pleaseCheckYourPassword, title: Strings.passwordDontMatch, context: context, contentType: ContentType.failure);

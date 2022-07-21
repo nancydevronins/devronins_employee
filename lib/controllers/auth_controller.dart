@@ -1,6 +1,8 @@
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:devroninsemployees/constants/strings.dart';
+import 'package:devroninsemployees/db/firebase_db.dart';
+import 'package:devroninsemployees/model/user_model.dart';
 import 'package:devroninsemployees/routes/routes.dart';
 import 'package:devroninsemployees/utils/flash_message.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -30,12 +32,20 @@ class AuthController extends GetxController {
     }
   }
 
-  void registerUser(String email, String password, BuildContext context) async {
+  void registerUser(String email, String password, String firstName, String lastName, String phone, String designation, BuildContext context) async {
     try {
       isLoading(true);
       await auth.createUserWithEmailAndPassword(email: email, password: password).then((value) {
         FlashMessage.showFlashMessage(
-            title: Strings.signUpSuccess, message: Strings.withEmail + email, contentType: ContentType.success, context: context);
+            title: Strings.registeredSuccess, message: Strings.withEmail + email, contentType: ContentType.success, context: context);
+        FirebaseDb.addUser(UserModel(
+            uid: value.user!.uid,
+            firstName: firstName,
+            lastName: lastName,
+            email: email,
+            designation: designation,
+            role: Strings.roleEmployee,
+            phone: phone));
       });
       isLoading(false);
     } on FirebaseAuthException catch (e) {
@@ -67,12 +77,16 @@ class AuthController extends GetxController {
     await fireStore.collection(Strings.users).doc(uid).get().then((value) {
       role.value = value.get(Strings.role);
     });
+    navigation();
+    print("Role:$role");
+  }
+
+  void navigation() {
     if (role.value == Strings.roleAdmin) {
       Get.offAllNamed(RoutesClass.adminHome);
     } else {
       Get.offAllNamed(RoutesClass.home);
     }
-    print("ROle:$role");
   }
 
   void logout() async {

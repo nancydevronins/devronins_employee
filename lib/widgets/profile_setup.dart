@@ -14,34 +14,53 @@ class ProfileSetup extends StatelessWidget {
         setUpYourProfile(context),
         firstNameField,
         lastNameField,
-        const SizedBox(
-          height: 16,
-        ),
+        phoneNumberField,
         const Text(Strings.selectDesignation),
-        Obx(() => Container(
-              margin: const EdgeInsets.only(top: 16, bottom: 16),
-              padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 8),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(30),
-                color: Colors.grey.withOpacity(0.2),
-              ),
-              child: DropdownButtonFormField(
-                  style: TextStyle(color: Colors.grey.shade700),
-                  decoration: const InputDecoration(border: InputBorder.none, contentPadding: EdgeInsets.all(12)),
-                  onChanged: (newValue) {
-                    LoginPageController.instance.dropDownValueChange(newValue.toString());
-                  },
-                  value: LoginPageController.instance.selectedDropdown.value,
-                  items: LoginPageController.instance.dropdownTextList
-                      .map((item) => DropdownMenuItem(
-                            value: item,
-                            child: Text(
-                              item,
-                            ),
-                          ))
-                      .toList()),
-            ))
+        dropdownDesignations
       ],
+    );
+  }
+
+  Obx get dropdownDesignations {
+    return Obx(() => Container(
+          margin: const EdgeInsets.only(top: 16, bottom: 16),
+          padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 8),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(30),
+            color: Colors.grey.withOpacity(0.2),
+          ),
+          child: DropdownButtonFormField(
+              style: TextStyle(color: Colors.grey.shade700),
+              decoration: const InputDecoration(border: InputBorder.none, contentPadding: EdgeInsets.all(12)),
+              onChanged: (newValue) {
+                LoginPageController.instance.dropDownValueChange(newValue.toString());
+              },
+              value: LoginPageController.instance.selectedDropdown.value,
+              items: LoginPageController.instance.dropdownTextList
+                  .map((item) => DropdownMenuItem(
+                        value: item,
+                        child: Text(
+                          item,
+                        ),
+                      ))
+                  .toList()),
+        ));
+  }
+
+  Container get phoneNumberField {
+    return Container(
+      margin: const EdgeInsets.only(top: 30, bottom: 16),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(30),
+        color: Colors.grey.withOpacity(0.2),
+      ),
+      padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 8),
+      child: TextField(
+        onChanged: (value) {
+          LoginPageController.instance.phoneNumber.value = value;
+        },
+        decoration: InputDecoration(contentPadding: EdgeInsets.all(12), border: InputBorder.none, hintText: Strings.phoneNumber),
+      ),
     );
   }
 
@@ -53,7 +72,10 @@ class ProfileSetup extends StatelessWidget {
         color: Colors.grey.withOpacity(0.2),
       ),
       padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 8),
-      child: const TextField(
+      child: TextField(
+        onChanged: (value) {
+          LoginPageController.instance.lastName.value = value;
+        },
         decoration: InputDecoration(contentPadding: EdgeInsets.all(12), border: InputBorder.none, hintText: Strings.lastName),
       ),
     );
@@ -67,7 +89,10 @@ class ProfileSetup extends StatelessWidget {
         color: Colors.grey.withOpacity(0.2),
       ),
       padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 8),
-      child: const TextField(
+      child: TextField(
+        onChanged: (value) {
+          LoginPageController.instance.firstName.value = value;
+        },
         decoration: InputDecoration(contentPadding: EdgeInsets.all(12), border: InputBorder.none, hintText: Strings.firstName),
       ),
     );

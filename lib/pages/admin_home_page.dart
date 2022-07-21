@@ -1,37 +1,67 @@
+import 'package:devroninsemployees/constants/colors.dart';
 import 'package:devroninsemployees/controllers/admin_homepage_controller.dart';
+import 'package:devroninsemployees/controllers/auth_controller.dart';
 import 'package:devroninsemployees/utils/responsive_layout.dart';
-import 'package:devroninsemployees/widgets/drawer.dart';
+import 'package:devroninsemployees/widgets/dashboard/dashboard.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 
 class AdminHomePage extends StatelessWidget {
   AdminHomePage({Key? key}) : super(key: key);
-  final _scaffoldKey = GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       drawerEnableOpenDragGesture: false,
-      drawer: DashBoardDrawer(),
-      appBar: ResponsiveLayout.isSmallScreen(context) ? AppBar() : null,
+      appBar: AppBar(
+        title: Obx(() => Text(
+              AdminHomePageController.instance.appBarTitle.value,
+              style: TextStyle(color: Colors.white),
+            )),
+        actions: [
+          IconButton(
+              onPressed: () {
+                AuthController.instance.logout();
+              },
+              icon: Icon(
+                Icons.logout_outlined,
+                color: Colors.white,
+              ))
+        ],
+        flexibleSpace: Container(
+          decoration: BoxDecoration(
+              gradient: const LinearGradient(colors: [
+                AppColors.greenColor,
+                AppColors.blueColor,
+              ], begin: Alignment.bottomRight, end: Alignment.topLeft),
+              boxShadow: [BoxShadow(color: AppColors.blueColor.withOpacity(.3), offset: Offset(0, 8), blurRadius: 8)]),
+        ),
+      ),
       body: SafeArea(
         bottom: false,
         top: false,
         child: Row(
           children: [
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: 5),
-              child: ResponsiveLayout.isLargeScreen(context) || ResponsiveLayout.isMediumScreen(context)
-                  ? Obx(() => NavigationRail(
-                        minWidth: 60,
-                        selectedIndex: AdminHomePageController.instance.screenIndex.value,
-                        destinations: navRailDestinations,
-                        onDestinationSelected: (index) {
-                          AdminHomePageController.instance.screenIndex.value = index;
-                        },
-                      ))
-                  : Container(),
-            ),
+            Obx(() => Container(
+                  decoration: BoxDecoration(
+                      gradient: const LinearGradient(colors: [
+                        AppColors.greenColor,
+                        AppColors.blueColor,
+                      ], begin: Alignment.bottomRight, end: Alignment.topLeft),
+                      boxShadow: [BoxShadow(color: AppColors.blueColor.withOpacity(.3), offset: Offset(0, 8), blurRadius: 8)]),
+                  child: NavigationRail(
+                    minWidth: 60,
+                    indicatorColor: Colors.black54,
+                    selectedLabelTextStyle: TextStyle(color: Colors.white),
+                    labelType: NavigationRailLabelType.selected,
+                    backgroundColor: Colors.transparent,
+                    selectedIndex: AdminHomePageController.instance.screenIndex.value,
+                    destinations: navRailDestinations,
+                    onDestinationSelected: (index) {
+                      AdminHomePageController.instance.screenIndex.value = index;
+                    },
+                  ),
+                )),
             Obx(() => createScreenFor(AdminHomePageController.instance.screenIndex.value))
           ],
         ),
@@ -42,7 +72,7 @@ class AdminHomePage extends StatelessWidget {
   Widget createScreenFor(int screenIndex) {
     switch (screenIndex) {
       case 0:
-        return Text('Das');
+        return DashBoard();
       case 1:
         return const Text('sfdet');
       case 2:
@@ -55,38 +85,25 @@ class AdminHomePage extends StatelessWidget {
   }
 }
 
-const List<NavigationDestination> appBarDestinations = [
-  NavigationDestination(
-    tooltip: "",
+List<NavigationRailDestination> navRailDestinations = const [
+  NavigationRailDestination(
     icon: Icon(Icons.widgets_outlined),
-    label: 'Dashboard',
+    label: Text('Dashboard'),
     selectedIcon: Icon(Icons.widgets),
   ),
-  NavigationDestination(
-    tooltip: "",
+  NavigationRailDestination(
     icon: Icon(Icons.text_snippet_outlined),
-    label: 'Typography',
+    label: Text('Records'),
     selectedIcon: Icon(Icons.text_snippet),
   ),
-  NavigationDestination(
-    tooltip: "",
+  NavigationRailDestination(
+    icon: Icon(Icons.feedback),
+    label: Text('Enquery'),
+    selectedIcon: Icon(Icons.feedback_outlined),
+  ),
+  NavigationRailDestination(
     icon: Icon(Icons.settings),
-    label: 'Elevation',
+    label: Text('Settings'),
     selectedIcon: Icon(Icons.settings_outlined),
   )
 ];
-final List<NavigationRailDestination> navRailDestinations = appBarDestinations
-    .map(
-      (destination) => NavigationRailDestination(
-        icon: Tooltip(
-          message: destination.label,
-          child: destination.icon,
-        ),
-        selectedIcon: Tooltip(
-          message: destination.label,
-          child: destination.selectedIcon,
-        ),
-        label: Text(destination.label),
-      ),
-    )
-    .toList();
