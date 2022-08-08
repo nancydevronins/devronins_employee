@@ -15,30 +15,32 @@ class LoginPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Container(
-                width: ResponsiveLayout.isLargeScreen(context) ? 500 : null,
-                margin: const EdgeInsets.all(30),
-                padding: const EdgeInsets.all(30),
-                decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(16),
-                    boxShadow: const [BoxShadow(color: Colors.black12, offset: Offset(0, 8), blurRadius: 8)]),
-                child: Obx(() {
-                  return Column(
-                    children: [
-                      LoginPageController.instance.isEnableSignUp.value ? SignUp() : Login(),
-                      TextButton(
-                          onPressed: () {
-                            LoginPageController.instance.toggleSignUp();
-                          },
-                          child: Text(LoginPageController.instance.isEnableSignUp.value ? Strings.alreadyHaveAnAccount : Strings.newUserSignupHere))
-                    ],
-                  );
-                })),
-          ],
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                  width: ResponsiveLayout.isLargeScreen(context) ? 500 : null,
+                  margin: const EdgeInsets.all(30),
+                  padding: const EdgeInsets.all(30),
+                  decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(16),
+                      boxShadow: const [BoxShadow(color: Colors.black12, offset: Offset(0, 8), blurRadius: 8)]),
+                  child: Obx(() {
+                    return Column(
+                      children: [
+                        LoginPageController.instance.isEnableSignUp.value ? SignUp() : Login(),
+                        TextButton(
+                            onPressed: () {
+                              LoginPageController.instance.toggleSignUp();
+                            },
+                            child: Text(LoginPageController.instance.isEnableSignUp.value ? Strings.alreadyHaveAnAccount : Strings.newUserSignupHere))
+                      ],
+                    );
+                  })),
+            ],
+          ),
         ),
       ),
     );

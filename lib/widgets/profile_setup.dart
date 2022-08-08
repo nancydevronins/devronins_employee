@@ -1,4 +1,5 @@
 import 'package:devroninsemployees/constants/strings.dart';
+import 'package:devroninsemployees/constants/strings.dart';
 import 'package:devroninsemployees/controllers/login_page_controller.dart';
 import 'package:devroninsemployees/utils/responsive_layout.dart';
 import 'package:flutter/material.dart';
@@ -37,12 +38,20 @@ class ProfileSetup extends StatelessWidget {
               },
               value: LoginPageController.instance.selectedDropdown.value,
               items: LoginPageController.instance.dropdownTextList
-                  .map((item) => DropdownMenuItem(
-                        value: item,
-                        child: Text(
-                          item,
-                        ),
-                      ))
+                  .map((item) => item == Strings.selectDesignation
+                      ? DropdownMenuItem(
+                          value: item,
+                          enabled: false,
+                          child: Text(
+                            item,
+                          ),
+                        )
+                      : DropdownMenuItem(
+                          value: item,
+                          child: Text(
+                            item,
+                          ),
+                        ))
                   .toList()),
         ));
   }

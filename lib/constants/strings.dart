@@ -27,6 +27,7 @@ class Strings {
   static const String invalidDevroninsEmail = 'This is not a DevRonins email id';
   static const String passwordRequired = 'Password is required';
   static const String passwordDonotMatch = 'Password do not match';
+  static const String accountNotFound = 'Account Not Found!';
   static const String enterConfirmPassword = 'Confirm password is required';
   static const String setUpYourProfile = 'Set up your profile';
   static const String firstName = 'First name';
@@ -55,4 +56,6 @@ class Strings {
   static const String calender = 'Calender';
   static const String addNewMember = 'Add new member';
   static const String add = 'Add';
+  static const String uidKey = 'KEY_USER_ID';
+  static const String uid = 'uid';
 }

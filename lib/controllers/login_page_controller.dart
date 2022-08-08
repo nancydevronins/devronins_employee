@@ -1,4 +1,5 @@
 import 'package:devroninsemployees/constants/strings.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class LoginPageController extends GetxController {
@@ -12,8 +13,14 @@ class LoginPageController extends GetxController {
   RxString firstName = ''.obs;
   RxString lastName = ''.obs;
   RxString phoneNumber = ''.obs;
-  var selectedDropdown = Strings.associate.obs;
+  var selectedDropdown = Strings.selectDesignation.obs;
+  final firstNameController = TextEditingController();
+  final lastNameController = TextEditingController();
+  final emailController = TextEditingController();
+  final phoneController = TextEditingController();
+  final passwordController = TextEditingController();
   List dropdownTextList = [
+    Strings.selectDesignation,
     Strings.associate,
     Strings.srAssociate,
     Strings.softwareEngineer,
@@ -51,11 +58,20 @@ class LoginPageController extends GetxController {
 
   void passwordChange(RxString value) {
     password = value;
-    update();
   }
 
   void confirmPasswordChange(RxString value) {
     confirmPassword = value;
     update();
+  }
+
+  @override
+  void dispose() {
+    firstNameController.clear();
+    lastNameController.clear();
+    emailController.clear();
+    phoneController.clear();
+    passwordController.clear();
+    super.dispose();
   }
 }

@@ -4,6 +4,7 @@ import 'package:devroninsemployees/controllers/auth_controller.dart';
 import 'package:devroninsemployees/controllers/login_page_controller.dart';
 import 'package:devroninsemployees/utils/flash_message.dart';
 import 'package:devroninsemployees/utils/responsive_layout.dart';
+import 'package:devroninsemployees/utils/wave_loading.dart';
 import 'package:devroninsemployees/widgets/profile_setup.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -43,7 +44,7 @@ class AddNewEmployeeForm extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 TextField(
-                  controller: TextEditingController(text: LoginPageController.instance.firstName.value),
+                  controller: LoginPageController.instance.firstNameController..text = LoginPageController.instance.firstName.value,
                   onChanged: (value) {
                     LoginPageController.instance.firstName.value = value;
                   },
@@ -62,7 +63,7 @@ class AddNewEmployeeForm extends StatelessWidget {
                   height: 24,
                 ),
                 TextField(
-                  controller: TextEditingController(text: LoginPageController.instance.lastName.value),
+                  controller: LoginPageController.instance.lastNameController..text = LoginPageController.instance.lastName.value,
                   onChanged: (value) {
                     LoginPageController.instance.lastName.value = value;
                   },
@@ -81,7 +82,7 @@ class AddNewEmployeeForm extends StatelessWidget {
                   height: 24,
                 ),
                 TextField(
-                  controller: TextEditingController(text: LoginPageController.instance.email.value),
+                  controller: LoginPageController.instance.emailController..text = LoginPageController.instance.email.value,
                   onChanged: (value) {
                     LoginPageController.instance.email.value = value;
                   },
@@ -100,7 +101,7 @@ class AddNewEmployeeForm extends StatelessWidget {
                   height: 24,
                 ),
                 TextField(
-                  controller: TextEditingController(text: LoginPageController.instance.phoneNumber.value),
+                  controller: LoginPageController.instance.phoneController..text = LoginPageController.instance.phoneNumber.value,
                   onChanged: (value) {
                     LoginPageController.instance.phoneNumber.value = value;
                   },
@@ -118,16 +119,16 @@ class AddNewEmployeeForm extends StatelessWidget {
                 SizedBox(
                   height: 8,
                 ),
-                ProfileSetup().dropdownDesignations,
+                dropdownDesignations,
                 SizedBox(
                   height: 8,
                 ),
                 Obx(
                   () => TextField(
-                    controller: TextEditingController(text: LoginPageController.instance.password.value),
+                    controller: LoginPageController.instance.passwordController..text = LoginPageController.instance.password.value,
                     obscureText: AdminHomePageController.instance.isVisiblePassword.value,
                     onChanged: (value) {
-                      LoginPageController.instance.password.value = value;
+                      LoginPageController.instance.passwordChange(value.obs);
                     },
                     decoration: InputDecoration(
                         focusedBorder: OutlineInputBorder(
@@ -169,6 +170,9 @@ class AddNewEmployeeForm extends StatelessWidget {
                       } else if (LoginPageController.instance.phoneNumber.isEmpty) {
                         FlashMessage.showFlashMessage(
                             title: Strings.error, message: Strings.phoneNumberRequired, contentType: ContentType.failure, context: context);
+                      } else if (LoginPageController.instance.selectedDropdown.value == Strings.selectDesignation) {
+                        FlashMessage.showFlashMessage(
+                            title: Strings.error, message: Strings.selectDesignation, contentType: ContentType.failure, context: context);
                       } else if (LoginPageController.instance.password.isEmpty) {
                         FlashMessage.showFlashMessage(
                             title: Strings.error, message: Strings.passwordRequired, contentType: ContentType.failure, context: context);
@@ -182,7 +186,7 @@ class AddNewEmployeeForm extends StatelessWidget {
                             LoginPageController.instance.selectedDropdown.value,
                             context);
                       }
-                      Get.back();
+                      Navigator.of(context, rootNavigator: true).pop();
                     },
                     child: Container(
                         width: ResponsiveLayout.isSmallScreen(context) ? null : Get.width / 8,
@@ -211,5 +215,39 @@ class AddNewEmployeeForm extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  Obx get dropdownDesignations {
+    return Obx(() => Container(
+          margin: const EdgeInsets.only(top: 16, bottom: 16),
+          padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 8),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(30),
+            color: Colors.grey.withOpacity(0.2),
+          ),
+          child: DropdownButtonFormField(
+              style: TextStyle(color: Colors.grey.shade700),
+              decoration: const InputDecoration(border: InputBorder.none, contentPadding: EdgeInsets.all(12)),
+              onChanged: (newValue) {
+                LoginPageController.instance.dropDownValueChange(newValue.toString());
+              },
+              value: LoginPageController.instance.selectedDropdown.value,
+              items: LoginPageController.instance.dropdownTextList
+                  .map((item) => item == Strings.selectDesignation
+                      ? DropdownMenuItem(
+                          value: item,
+                          enabled: false,
+                          child: Text(
+                            item,
+                          ),
+                        )
+                      : DropdownMenuItem(
+                          value: item,
+                          child: Text(
+                            item,
+                          ),
+                        ))
+                  .toList()),
+        ));
   }
 }

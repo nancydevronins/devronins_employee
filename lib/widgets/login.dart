@@ -60,12 +60,18 @@ class Login extends StatelessWidget {
   InkWell loginButton(context) {
     return InkWell(
         onTap: () {
-          if (!LoginPageController.instance.email.contains(Strings.emailValidation)) {
+          if (!LoginPageController.instance.email.contains(Strings.emailValidation) && LoginPageController.instance.email.isEmpty) {
             FlashMessage.showFlashMessage(
                 title: Strings.error, message: Strings.invalidDevroninsEmail, contentType: ContentType.help, context: context);
+          } else if (LoginPageController.instance.password.isEmpty) {
+            FlashMessage.showFlashMessage(
+                title: Strings.error, message: Strings.pleaseCheckYourPassword, contentType: ContentType.failure, context: context);
           } else {
             AuthController.instance
                 .loginUser(LoginPageController.instance.email.value.trim(), LoginPageController.instance.password.value.trim(), context);
+
+            LoginPageController.instance.email.value = '';
+            LoginPageController.instance.password.value = '';
           }
         },
         child: Container(
