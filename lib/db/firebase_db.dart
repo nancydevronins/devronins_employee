@@ -6,6 +6,7 @@ import 'package:devroninsemployees/encription/encypt_data.dart';
 import 'package:devroninsemployees/model/user_model.dart';
 import 'package:devroninsemployees/utils/flash_message.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:get/get.dart';
 import 'package:get/get_rx/src/rx_types/rx_types.dart';
 import 'package:get_storage/src/storage_impl.dart';
 import 'package:uuid/uuid.dart';
@@ -22,7 +23,7 @@ class FirebaseDb {
       'role': userModel.role,
       'phone': userModel.phone
     });
-    box.write(Strings.uidKey, userModel.uid);
+    Get.back();
     FlashMessage.showFlashMessage(
         title: Strings.registeredSuccess, message: Strings.withEmail + userModel.email, contentType: ContentType.success, context: context);
   }

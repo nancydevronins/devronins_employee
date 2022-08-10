@@ -1,5 +1,6 @@
 import 'package:devroninsemployees/controllers/auth_controller.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -12,11 +13,11 @@ class HomePage extends StatelessWidget {
           Center(
             child: Text('Homepage'),
           ),
-          ElevatedButton(
+          Obx(() => ElevatedButton(
               onPressed: () {
                 AuthController.instance.logout();
               },
-              child: Text('Log'))
+              child: Text('Log')))
         ],
       ),
     );

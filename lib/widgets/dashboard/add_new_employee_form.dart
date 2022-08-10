@@ -186,7 +186,6 @@ class AddNewEmployeeForm extends StatelessWidget {
                             LoginPageController.instance.selectedDropdown.value,
                             context);
                       }
-                      Navigator.of(context, rootNavigator: true).pop();
                     },
                     child: Container(
                         width: ResponsiveLayout.isSmallScreen(context) ? null : Get.width / 8,

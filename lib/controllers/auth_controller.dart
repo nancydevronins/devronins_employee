@@ -19,26 +19,21 @@ class AuthController extends GetxController {
   var uuid = const Uuid();
   final box = GetStorage();
   RxString userId = ''.obs;
-
+  late Worker worker;
   @override
-  void onReady() {
-    super.onReady();
+  void onInit() {
     box.listen(() {
       String? userId = box.read(Strings.uidKey);
       if (userId != null) {
         role.bindStream(FirebaseDb.roleStream(fireStore, userId));
       }
-      ever(role, _initialScreen);
+      worker = ever(role, (roleValue) {
+        print("Role:$roleValue");
+        if (roleValue == null) worker.dispose;
+        navigation(roleValue);
+      });
     });
-  }
-
-  _initialScreen(role) async {
-    print("Role:$role");
-    if (role == null) {
-      Get.offAllNamed(RoutesClass.loginPage);
-    } else {
-      navigation();
-    }
+    super.onInit();
   }
 
   void registerUser(String email, String password, String firstName, String lastName, String phone, String designation, context) async {
@@ -64,21 +59,18 @@ class AuthController extends GetxController {
       isLoading(false);
       FlashMessage.showFlashMessage(title: 'Error', message: e.toString(), contentType: ContentType.failure, context: context);
     }
-    update();
   }
 
   void loginUser(String email, String password, BuildContext context) async {
     isLoading(true);
     await FirebaseDb.loginWithEmailAndPassword(fireStore, email, password, context, box);
     isLoading(false);
-
-    update();
   }
 
-  void navigation() {
-    if (role.value == Strings.roleAdmin) {
+  navigation(roleValue) {
+    if (roleValue == Strings.roleAdmin) {
       Get.offAllNamed(RoutesClass.adminHome);
-    } else if (role.value == Strings.roleEmployee) {
+    } else if (roleValue == Strings.roleEmployee) {
       Get.offAllNamed(RoutesClass.home);
     } else {
       Get.offAllNamed(RoutesClass.loginPage);
@@ -87,6 +79,6 @@ class AuthController extends GetxController {
 
   void logout() async {
     await box.erase();
-    navigation();
+    role.value = '';
   }
 }
