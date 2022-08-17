@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:devroninsemployees/constants/strings.dart';
 import 'package:devroninsemployees/controllers/auth_controller.dart';
 import 'package:devroninsemployees/encription/encypt_data.dart';
+import 'package:devroninsemployees/model/calender_model.dart';
 import 'package:devroninsemployees/model/user_model.dart';
 import 'package:devroninsemployees/utils/flash_message.dart';
 import 'package:flutter/src/widgets/framework.dart';
@@ -37,6 +38,12 @@ class FirebaseDb {
       }
       return users;
     });
+  }
+
+  static storeCalenderData(FirebaseFirestore firestore, CalenderModel calenderModel, BuildContext context) async {
+    await firestore.collection(Strings.calender.toLowerCase()).doc().set({'festival': calenderModel.festival, 'date': calenderModel.date});
+    Get.back();
+    FlashMessage.showFlashMessage(title: Strings.eventAdded, message: calenderModel.festival, contentType: ContentType.success, context: context);
   }
 
   static loginWithEmailAndPassword(FirebaseFirestore fireStore, String email, String password, BuildContext context, GetStorage box) async {

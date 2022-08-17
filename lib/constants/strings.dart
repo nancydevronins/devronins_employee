@@ -58,4 +58,7 @@ class Strings {
   static const String add = 'Add';
   static const String uidKey = 'KEY_USER_ID';
   static const String uid = 'uid';
+  static const String title = 'Festival';
+  static const String festivalTitle = 'Enter Festivals name here';
+  static const String eventAdded = ' Event Added Successfully';
 }

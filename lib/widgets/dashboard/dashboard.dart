@@ -4,8 +4,11 @@ import 'package:devroninsemployees/constants/colors.dart';
 import 'package:devroninsemployees/constants/strings.dart';
 import 'package:devroninsemployees/controllers/admin_homepage_controller.dart';
 import 'package:devroninsemployees/controllers/user_controller.dart';
+import 'package:devroninsemployees/pages/calender_page.dart';
+import 'package:devroninsemployees/routes/routes.dart';
 import 'package:devroninsemployees/utils/responsive_layout.dart';
 import 'package:devroninsemployees/widgets/dashboard/add_new_employee_form.dart';
+import 'package:devroninsemployees/widgets/dashboard/calender.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -24,19 +27,21 @@ class DashBoard extends StatelessWidget {
         children: <Widget>[
           totalEmployee(context),
           addNewMember(context),
-          calender,
+          calender(context),
         ],
       ),
     ));
   }
 
-  InkWell get calender {
+  InkWell calender(context) {
     return InkWell(
       borderRadius: BorderRadius.circular(25),
       onHover: (value) {
         AdminHomePageController.instance.isHover3.value = value;
       },
-      onTap: () {},
+      onTap: () {
+        Get.toNamed(RoutesClass.calenderPage);
+      },
       child: ClipRRect(
         borderRadius: BorderRadius.circular(25),
         child: BackdropFilter(

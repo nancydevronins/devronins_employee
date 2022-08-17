@@ -1,11 +1,11 @@
 import 'package:devroninsemployees/constants/colors.dart';
 import 'package:devroninsemployees/controllers/admin_homepage_controller.dart';
 import 'package:devroninsemployees/controllers/auth_controller.dart';
+import 'package:devroninsemployees/pages/calender_page.dart';
 import 'package:devroninsemployees/utils/responsive_layout.dart';
 import 'package:devroninsemployees/widgets/dashboard/dashboard.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get_storage/get_storage.dart';
 
 class AdminHomePage extends StatelessWidget {
   AdminHomePage({Key? key}) : super(key: key);
@@ -74,7 +74,7 @@ class AdminHomePage extends StatelessWidget {
       case 0:
         return DashBoard();
       case 1:
-        return const Text('sfdet');
+        return const CalenderPage();
       case 2:
         return const Text('dfg');
       case 3:
@@ -93,7 +93,7 @@ List<NavigationRailDestination> navRailDestinations = const [
   ),
   NavigationRailDestination(
     icon: Icon(Icons.text_snippet_outlined),
-    label: Text('Records'),
+    label: Text('Calender'),
     selectedIcon: Icon(Icons.text_snippet),
   ),
   NavigationRailDestination(
