@@ -33,6 +33,7 @@ class AuthController extends GetxController {
         navigation(roleValue);
       });
     });
+
     super.onInit();
   }
 

@@ -1,5 +1,7 @@
+import 'dart:html';
 import 'dart:ui';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 
 class MeetingDataSource extends CalendarDataSource {
@@ -9,22 +11,12 @@ class MeetingDataSource extends CalendarDataSource {
 
   @override
   DateTime getStartTime(int index) {
-    return appointments![index].from;
-  }
-
-  @override
-  DateTime getEndTime(int index) {
-    return appointments![index].to;
+    return appointments![index].date;
   }
 
   @override
   String getSubject(int index) {
     return appointments![index].eventName;
-  }
-
-  @override
-  Color getColor(int index) {
-    return appointments![index].background;
   }
 
   @override
@@ -34,11 +26,13 @@ class MeetingDataSource extends CalendarDataSource {
 }
 
 class Meeting {
-  Meeting(this.eventName, this.from, this.to, this.background, this.isAllDay);
-
-  String eventName;
-  DateTime from;
-  DateTime to;
-  Color background;
-  bool isAllDay;
+  Meeting({required this.eventName, required this.date, required this.isAllDay});
+  late String eventName;
+  late DateTime date;
+  late bool isAllDay;
+  Meeting.fromDocumentSnapshot({required DocumentSnapshot snapshot}) {
+    eventName = snapshot.get('eventName');
+    date = DateTime.parse(snapshot.get('date'));
+    isAllDay = snapshot.get('isAllDay');
+  }
 }

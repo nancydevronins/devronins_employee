@@ -15,28 +15,27 @@ class CalenderPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(20.0),
+      padding: const EdgeInsets.all(30.0),
       child: SingleChildScrollView(
         child: Wrap(
           children: [
-            SizedBox(
+            Obx(
+              () => SizedBox(
                 height: Get.height,
-                width: ResponsiveLayout.isSmallScreen(context) && ResponsiveLayout.isMediumScreen(context)
-                    ? Get.size.width * 0.1
-                    : Get.size.width * 0.85,
-                child: Obx(
-                  () => SfCalendar(
-                    view: CalendarView.month,
-                    dataSource: MeetingDataSource(AdminHomePageController.instance.meetings.value),
-                    showDatePickerButton: true,
-                    monthViewSettings: MonthViewSettings(
-                      agendaItemHeight: Get.height * 0.1,
-                      appointmentDisplayMode: MonthAppointmentDisplayMode.indicator,
-                      showAgenda: true,
-                      showTrailingAndLeadingDates: true,
-                    ),
+                width: ResponsiveLayout.isLargeScreen(context) ? Get.width * 0.80 : 340,
+                child: SfCalendar(
+                  view: CalendarView.month,
+                  dataSource: MeetingDataSource(AdminHomePageController.instance.calenders),
+                  showDatePickerButton: true,
+                  monthViewSettings: MonthViewSettings(
+                    agendaItemHeight: Get.height * 0.1,
+                    appointmentDisplayMode: MonthAppointmentDisplayMode.indicator,
+                    showAgenda: true,
+                    showTrailingAndLeadingDates: true,
                   ),
-                )),
+                ),
+              ),
+            ),
             FloatingActionButton(
                 backgroundColor: AppColors.greenColor,
                 onPressed: () {

@@ -63,8 +63,8 @@ class AddHolidaysEvent extends StatelessWidget {
                     onTap: AdminHomePageController.instance.festivalValue.value.isEmpty
                         ? null
                         : () {
-                            AdminHomePageController.instance.getDataSource(AdminHomePageController.instance.festivalValue.value,
-                                DateTime.parse(AdminHomePageController.instance.selectedDate), context);
+                            AdminHomePageController.instance.storeCalenderData(
+                                AdminHomePageController.instance.festivalValue.value, AdminHomePageController.instance.selectedDate, context);
                           },
                     child: Container(
                         width: ResponsiveLayout.isSmallScreen(context) ? null : Get.width / 8,
