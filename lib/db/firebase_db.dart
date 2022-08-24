@@ -30,7 +30,7 @@ class FirebaseDb {
   }
 
   static Stream<List<UserModel>> usersStream() {
-    return AuthController().fireStore.collection(Strings.users).snapshots().map((querySnapshot) {
+    return AuthController().fireStore.collection(Strings.users).where('role', isNotEqualTo: Strings.roleAdmin).snapshots().map((querySnapshot) {
       List<UserModel> users = [];
       for (var user in querySnapshot.docs) {
         final userModel = UserModel.fromDocumentSnapshot(snapshot: user);

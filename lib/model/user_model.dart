@@ -24,7 +24,7 @@ class UserModel {
     firstName = snapshot.get('firstName');
     lastName = snapshot.get('lastName');
     email = snapshot.get('email');
-    email = snapshot.get('password');
+    password = snapshot.get('password');
     designation = snapshot.get('designation');
     role = snapshot.get('role');
     phone = snapshot.get('phone');

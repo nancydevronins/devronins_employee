@@ -6,6 +6,7 @@ class UserController extends GetxController {
   static UserController instance = Get.find();
   Rx<List<UserModel>> usersList = Rx<List<UserModel>>([]);
   List<UserModel> get users => usersList.value;
+
   @override
   void onReady() {
     usersList.bindStream(FirebaseDb.usersStream());

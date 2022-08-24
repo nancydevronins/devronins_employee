@@ -4,11 +4,10 @@ import 'package:devroninsemployees/constants/colors.dart';
 import 'package:devroninsemployees/constants/strings.dart';
 import 'package:devroninsemployees/controllers/admin_homepage_controller.dart';
 import 'package:devroninsemployees/controllers/user_controller.dart';
-import 'package:devroninsemployees/pages/calender_page.dart';
+
 import 'package:devroninsemployees/routes/routes.dart';
 import 'package:devroninsemployees/utils/responsive_layout.dart';
 import 'package:devroninsemployees/widgets/dashboard/add_new_employee_form.dart';
-import 'package:devroninsemployees/widgets/dashboard/calender.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -57,13 +56,16 @@ class DashBoard extends StatelessWidget {
               children: [
                 Icon(
                   Icons.calendar_month,
-                  size: 40,
+                  size: 50,
                   color: AdminHomePageController.instance.isHover3.value ? Colors.black54 : Colors.black,
+                ),
+                SizedBox(
+                  height: 10,
                 ),
                 Text(
                   Strings.calender,
                   style:
-                      TextStyle(fontWeight: FontWeight.bold, color: AdminHomePageController.instance.isHover3.value ? Colors.black54 : Colors.black),
+                      TextStyle(color: AdminHomePageController.instance.isHover1.value ? Colors.black54 : Colors.black, fontWeight: FontWeight.bold),
                 ),
               ],
             ),
@@ -106,7 +108,7 @@ class DashBoard extends StatelessWidget {
                 Text(
                   Strings.addNewMember,
                   style:
-                      TextStyle(fontWeight: FontWeight.bold, color: AdminHomePageController.instance.isHover2.value ? Colors.black54 : Colors.black),
+                      TextStyle(color: AdminHomePageController.instance.isHover1.value ? Colors.black54 : Colors.black, fontWeight: FontWeight.bold),
                 ),
               ],
             ),
@@ -119,7 +121,7 @@ class DashBoard extends StatelessWidget {
   totalEmployee(context) {
     return InkWell(
       borderRadius: BorderRadius.circular(25),
-      onTap: () {},
+      onTap: () => Get.toNamed(RoutesClass.totalEmployeesPage),
       onHover: (value) {
         AdminHomePageController.instance.isHover1.value = value;
       },
@@ -144,11 +146,9 @@ class DashBoard extends StatelessWidget {
                   SizedBox(
                     height: 10,
                   ),
-                  Text(
-                    "${Strings.totalEmployee} ${UserController.instance.users.length}",
-                    style: Theme.of(context).textTheme.subtitle1!.copyWith(
-                        color: AdminHomePageController.instance.isHover1.value ? Colors.black54 : Colors.black, fontWeight: FontWeight.bold),
-                  ),
+                  Text("${Strings.totalEmployee} ${UserController.instance.users.length}",
+                      style: TextStyle(
+                          color: AdminHomePageController.instance.isHover1.value ? Colors.black54 : Colors.black, fontWeight: FontWeight.bold)),
                 ],
               ),
             ),

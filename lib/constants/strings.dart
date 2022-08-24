@@ -52,7 +52,7 @@ class Strings {
   static const String roleAdmin = 'admin';
   static const String roleEmployee = 'employee';
   static const String users = 'users';
-  static const String totalEmployee = 'Total Employee';
+  static const String totalEmployee = 'Total Employees';
   static const String calender = 'Calender';
   static const String addNewMember = 'Add new member';
   static const String add = 'Add';

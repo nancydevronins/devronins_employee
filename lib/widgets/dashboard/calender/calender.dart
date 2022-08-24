@@ -1,16 +1,17 @@
 import 'package:devroninsemployees/constants/colors.dart';
 import 'package:devroninsemployees/controllers/admin_homepage_controller.dart';
-import 'package:devroninsemployees/widgets/dashboard/add_holidays_events_form.dart';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 
-import '../utils/calender_data_source.dart';
-import '../utils/responsive_layout.dart';
+import '../../../utils/calender_data_source.dart';
+import '../../../utils/responsive_layout.dart';
+import 'add_holidays_events_form.dart';
 
-class CalenderPage extends StatelessWidget {
-  const CalenderPage({Key? key}) : super(key: key);
+class Calender extends StatelessWidget {
+  const Calender({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +27,7 @@ class CalenderPage extends StatelessWidget {
                 child: SfCalendar(
                   view: CalendarView.month,
                   dataSource: MeetingDataSource(AdminHomePageController.instance.calenders),
-                  showDatePickerButton: true,
+                  // showDatePickerButton: true,
                   monthViewSettings: MonthViewSettings(
                     agendaItemHeight: Get.height * 0.1,
                     appointmentDisplayMode: MonthAppointmentDisplayMode.indicator,
