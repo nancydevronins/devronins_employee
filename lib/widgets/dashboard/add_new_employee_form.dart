@@ -1,5 +1,8 @@
+import 'dart:html';
+
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:devroninsemployees/constants/colors.dart';
+import 'package:devroninsemployees/constants/images.dart';
 import 'package:devroninsemployees/controllers/auth_controller.dart';
 import 'package:devroninsemployees/controllers/login_page_controller.dart';
 import 'package:devroninsemployees/utils/flash_message.dart';
@@ -11,6 +14,7 @@ import 'package:get/get.dart';
 
 import '../../constants/strings.dart';
 import '../../controllers/admin_homepage_controller.dart';
+import '../../utils/nemorphism_shadow.dart';
 
 class AddNewEmployeeForm extends StatelessWidget {
   const AddNewEmployeeForm({Key? key}) : super(key: key);
@@ -18,6 +22,7 @@ class AddNewEmployeeForm extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
+      backgroundColor: AppColors.white10,
       title: Padding(
         padding: const EdgeInsets.only(top: 10, right: 10, left: 10),
         child: Row(
@@ -43,6 +48,42 @@ class AddNewEmployeeForm extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
+                Obx(
+                  () => LoginPageController.instance.profileUrl.value.isEmpty
+                      ? LoginPageController.instance.isLoading.value
+                          ? Center(child: CircularProgressIndicator())
+                          : Container(
+                              height: Get.height * 0.45,
+                              clipBehavior: Clip.antiAlias,
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                boxShadow: NeomorphismShape.boxShape,
+                                color: AppColors.white10,
+                              ),
+                              child: InkWell(
+                                onTap: () {
+                                  LoginPageController.instance.pickAndStoreUserImageInDb();
+                                },
+                                child: Image.asset(
+                                  Images.placeholder,
+                                  height: 20,
+                                ),
+                              ),
+                            )
+                      : Container(
+                          width: Get.width,
+                          height: Get.height * 0.35,
+                          clipBehavior: Clip.antiAlias,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            boxShadow: NeomorphismShape.boxShape,
+                            color: AppColors.white10,
+                          ),
+                          child: Image.network(LoginPageController.instance.profileUrl.value)),
+                ),
+                SizedBox(
+                  height: 24,
+                ),
                 TextField(
                   controller: LoginPageController.instance.firstNameController..text = LoginPageController.instance.firstName.value,
                   onChanged: (value) {
@@ -126,7 +167,7 @@ class AddNewEmployeeForm extends StatelessWidget {
                 Obx(
                   () => TextField(
                     controller: LoginPageController.instance.passwordController..text = LoginPageController.instance.password.value,
-                    obscureText: AdminHomePageController.instance.isVisiblePassword.value,
+                    obscureText: LoginPageController.instance.isVisiblePassword.value,
                     onChanged: (value) {
                       LoginPageController.instance.passwordChange(value.obs);
                     },
@@ -141,9 +182,9 @@ class AddNewEmployeeForm extends StatelessWidget {
                         suffixIcon: Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: IconButton(
-                            icon: Icon(AdminHomePageController.instance.isVisiblePassword.value ? Icons.visibility_off : Icons.visibility),
+                            icon: Icon(LoginPageController.instance.isVisiblePassword.value ? Icons.visibility_off : Icons.visibility),
                             onPressed: () {
-                              AdminHomePageController.instance.isVisiblePassword.value = !AdminHomePageController.instance.isVisiblePassword.value;
+                              LoginPageController.instance.isVisiblePassword.value = !LoginPageController.instance.isVisiblePassword.value;
                             },
                           ),
                         ),

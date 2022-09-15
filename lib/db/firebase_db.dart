@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:devroninsemployees/constants/strings.dart';
@@ -6,10 +8,13 @@ import 'package:devroninsemployees/encription/encypt_data.dart';
 import 'package:devroninsemployees/model/user_model.dart';
 import 'package:devroninsemployees/utils/calender_data_source.dart';
 import 'package:devroninsemployees/utils/flash_message.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:get/get.dart';
 import 'package:get/get_rx/src/rx_types/rx_types.dart';
 import 'package:get_storage/src/storage_impl.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:uuid/uuid.dart';
 
 class FirebaseDb {
@@ -40,6 +45,26 @@ class FirebaseDb {
     });
   }
 
+  static Future<String?> uploadAndGetImgUrlInStorage(XFile file) async {
+    if (file == null) {
+      return null;
+    }
+    String imageName = ("image_${DateTime.now().microsecondsSinceEpoch}.jpg");
+    Reference ref = FirebaseStorage.instance.ref().child('users').child('/$imageName');
+    final metadata = SettableMetadata(
+      contentType: 'image/jpeg',
+      customMetadata: {'picked-file-path': file.path},
+    );
+
+    if (kIsWeb) {
+      await ref.putData(await file.readAsBytes(), metadata);
+      return await ref.getDownloadURL();
+    } else {
+      await ref.putFile(File(file.path), metadata);
+      return await ref.getDownloadURL();
+    }
+  }
+
   static storeCalenderData(FirebaseFirestore firestore, Meeting meeting, BuildContext context) async {
     await firestore
         .collection(Strings.calender.toLowerCase())
@@ -62,6 +87,7 @@ class FirebaseDb {
 
   static loginWithEmailAndPassword(FirebaseFirestore fireStore, String email, String password, BuildContext context, GetStorage box) async {
     await fireStore.collection(Strings.users).where(Strings.email.toLowerCase(), isEqualTo: email).get().then((querySnapShot) async {
+      print("snapshot$querySnapShot");
       if (querySnapShot.docs.isNotEmpty) {
         for (var snapshot in querySnapShot.docs) {
           String getPassword = snapshot.get(Strings.password.toLowerCase());

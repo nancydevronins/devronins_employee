@@ -13,11 +13,11 @@ class EmployeeDetails extends StatelessWidget {
       child: Column(
         children: [
           Text("${UserController.instance.users[index].firstName} ${UserController.instance.users[index].lastName}"),
-          SizedBox(
+          const SizedBox(
             height: 12,
           ),
           Text(UserController.instance.users[index].email),
-          SizedBox(
+          const SizedBox(
             height: 12,
           ),
         ],

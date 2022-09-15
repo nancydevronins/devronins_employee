@@ -3,6 +3,7 @@ import 'package:devroninsemployees/db/firebase_db.dart';
 import 'package:devroninsemployees/utils/calender_data_source.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 
@@ -21,10 +22,10 @@ class AdminHomePageController extends GetxController {
   RxBool isHover1 = false.obs;
   RxBool isHover2 = false.obs;
   RxBool isHover3 = false.obs;
-  RxBool isVisiblePassword = true.obs;
   RxBool isLoading = false.obs;
   Rx<List<Meeting>> calender = Rx<List<Meeting>>([]);
   List<Meeting> get calenders => calender.value;
+
   storeCalenderData(String title, String date, BuildContext context) async {
     // final DateTime today = DateTime.now();
     // final DateTime startTime = DateTime(today.year, today.month, today.day, 10, 0, 0);
