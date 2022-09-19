@@ -16,6 +16,7 @@ class TotalEmployee extends StatelessWidget {
         showDialog(
             context: context,
             builder: (ctx) => AlertDialog(
+                  backgroundColor: AppColors.white10,
                   title: Align(
                     alignment: Alignment.centerRight,
                     child: IconButton(

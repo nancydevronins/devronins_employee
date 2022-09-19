@@ -9,6 +9,7 @@ class UserModel {
   late String designation;
   late String role;
   late String phone;
+  late String profileUrl;
 
   UserModel(
       {required this.uid,
@@ -18,7 +19,8 @@ class UserModel {
       required this.password,
       required this.designation,
       required this.role,
-      required this.phone});
+      required this.phone,
+      required this.profileUrl});
   UserModel.fromDocumentSnapshot({required DocumentSnapshot snapshot}) {
     uid = snapshot.id;
     firstName = snapshot.get('firstName');
@@ -28,5 +30,6 @@ class UserModel {
     designation = snapshot.get('designation');
     role = snapshot.get('role');
     phone = snapshot.get('phone');
+    profileUrl = snapshot.get('profileUrl');
   }
 }

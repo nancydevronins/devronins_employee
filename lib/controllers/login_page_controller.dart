@@ -1,13 +1,22 @@
+import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:devroninsemployees/constants/strings.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../db/firebase_db.dart';
+import '../encription/encypt_data.dart';
+import '../model/user_model.dart';
+import 'package:uuid/uuid.dart';
+
+import '../utils/flash_message.dart';
 
 class LoginPageController extends GetxController {
   static LoginPageController instance = Get.find();
+  var uuid = const Uuid();
+  final box = GetStorage();
   RxBool isEnableSignUp = false.obs;
   RxBool isVisiblePassword = true.obs;
   RxString email = ''.obs;
@@ -83,6 +92,39 @@ class LoginPageController extends GetxController {
         isLoading(false);
       });
     });
+  }
+
+  void loginUser(String email, String password, BuildContext context) async {
+    isLoading(true);
+    await FirebaseDb.loginWithEmailAndPassword(email, password, context, box);
+    isLoading(false);
+  }
+
+  void registerUser(
+      String email, String password, String firstName, String lastName, String phone, String profileUrl, String designation, context) async {
+    try {
+      isLoading(true);
+      await EncryptData.encyptAES(password);
+
+      await FirebaseDb.registerUser(
+          UserModel(
+            uid: uuid.v4(),
+            firstName: firstName,
+            lastName: lastName,
+            email: email,
+            password: EncryptData.encrypted!.base16,
+            designation: designation,
+            role: Strings.roleEmployee,
+            phone: phone,
+            profileUrl: profileUrl,
+          ),
+          box,
+          context);
+      isLoading(false);
+    } catch (e) {
+      isLoading(false);
+      FlashMessage.showFlashMessage(title: 'Error', message: e.toString(), contentType: ContentType.failure, context: context);
+    }
   }
 
   @override

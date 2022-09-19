@@ -85,8 +85,8 @@ class FirebaseDb {
     });
   }
 
-  static loginWithEmailAndPassword(FirebaseFirestore fireStore, String email, String password, BuildContext context, GetStorage box) async {
-    await fireStore.collection(Strings.users).where(Strings.email.toLowerCase(), isEqualTo: email).get().then((querySnapShot) async {
+  static loginWithEmailAndPassword(String email, String password, BuildContext context, GetStorage box) async {
+    await AuthController().fireStore.collection(Strings.users).where(Strings.email.toLowerCase(), isEqualTo: email).get().then((querySnapShot) async {
       print("snapshot$querySnapShot");
       if (querySnapShot.docs.isNotEmpty) {
         for (var snapshot in querySnapShot.docs) {

@@ -60,5 +60,6 @@ class Strings {
   static const String uid = 'uid';
   static const String title = 'Festival';
   static const String festivalTitle = 'Enter Festivals name here';
-  static const String eventAdded = ' Event Added Successfully';
+  static const String eventAdded = 'Event Added Successfully';
+  static const String profilePicRequired = 'Profile Avatar is required!';
 }

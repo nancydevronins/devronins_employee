@@ -5,6 +5,11 @@ import 'package:devroninsemployees/utils/responsive_layout.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../constants/colors.dart';
+import '../constants/images.dart';
+import '../utils/nemorphism_shadow.dart';
+import '../utils/wave_loading.dart';
+
 class ProfileSetup extends StatelessWidget {
   const ProfileSetup({Key? key}) : super(key: key);
 
@@ -13,12 +18,48 @@ class ProfileSetup extends StatelessWidget {
     return Column(
       children: [
         setUpYourProfile(context),
+        selectProfilePic(),
         firstNameField,
         lastNameField,
         phoneNumberField,
         const Text(Strings.selectDesignation),
         dropdownDesignations
       ],
+    );
+  }
+
+  Obx selectProfilePic() {
+    return Obx(
+      () => LoginPageController.instance.profileUrl.value.isEmpty
+          ? LoginPageController.instance.isLoading.value
+              ? Center(child: WaveLoading())
+              : Container(
+                  height: Get.height * 0.35,
+                  clipBehavior: Clip.antiAlias,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    boxShadow: NeomorphismShape.boxShape,
+                    color: AppColors.white10,
+                  ),
+                  child: InkWell(
+                    onTap: () {
+                      LoginPageController.instance.pickAndStoreUserImageInDb();
+                    },
+                    child: Image.asset(
+                      Images.placeholder,
+                    ),
+                  ),
+                )
+          : Container(
+              width: Get.width,
+              height: Get.height * 0.35,
+              clipBehavior: Clip.antiAlias,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                boxShadow: NeomorphismShape.boxShape,
+                color: AppColors.white10,
+              ),
+              child: Image.network(LoginPageController.instance.profileUrl.value)),
     );
   }
 
@@ -102,15 +143,18 @@ class ProfileSetup extends StatelessWidget {
         onChanged: (value) {
           LoginPageController.instance.firstName.value = value;
         },
-        decoration: InputDecoration(contentPadding: EdgeInsets.all(12), border: InputBorder.none, hintText: Strings.firstName),
+        decoration: const InputDecoration(contentPadding: EdgeInsets.all(12), border: InputBorder.none, hintText: Strings.firstName),
       ),
     );
   }
 
-  Text setUpYourProfile(BuildContext context) {
-    return Text(
-      Strings.setUpYourProfile,
-      style: TextStyle(fontSize: ResponsiveLayout.isLargeScreen(context) && ResponsiveLayout.isMediumScreen(context) ? 20 : 16),
+  Padding setUpYourProfile(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(20.0),
+      child: Text(
+        Strings.setUpYourProfile,
+        style: TextStyle(fontSize: ResponsiveLayout.isLargeScreen(context) && ResponsiveLayout.isMediumScreen(context) ? 20 : 16),
+      ),
     );
   }
 }

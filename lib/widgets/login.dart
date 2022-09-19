@@ -67,7 +67,7 @@ class Login extends StatelessWidget {
             FlashMessage.showFlashMessage(
                 title: Strings.error, message: Strings.pleaseCheckYourPassword, contentType: ContentType.failure, context: context);
           } else {
-            AuthController.instance
+            LoginPageController.instance
                 .loginUser(LoginPageController.instance.email.value.trim(), LoginPageController.instance.password.value.trim(), context);
 
             LoginPageController.instance.email.value = '';

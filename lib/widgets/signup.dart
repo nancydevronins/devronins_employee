@@ -116,12 +116,13 @@ class SignUp extends StatelessWidget {
               FlashMessage.showFlashMessage(
                   title: Strings.error, message: Strings.phoneNumberRequired, contentType: ContentType.failure, context: context);
             } else {
-              AuthController.instance.registerUser(
+              LoginPageController.instance.registerUser(
                   LoginPageController.instance.email.value.trim(),
                   LoginPageController.instance.password.value.trim(),
                   LoginPageController.instance.firstName.value,
                   LoginPageController.instance.lastName.value,
                   LoginPageController.instance.phoneNumber.value,
+                  LoginPageController.instance.profileUrl.value,
                   LoginPageController.instance.selectedDropdown.value,
                   context);
             }

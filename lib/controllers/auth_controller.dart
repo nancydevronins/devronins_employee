@@ -9,14 +9,13 @@ import 'package:devroninsemployees/utils/flash_message.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:uuid/uuid.dart';
 
 class AuthController extends GetxController {
   static AuthController instance = Get.find();
   FirebaseFirestore fireStore = FirebaseFirestore.instance;
   RxBool isLoading = false.obs;
   RxString role = ''.obs;
-  var uuid = const Uuid();
+
   final box = GetStorage();
   RxString userId = ''.obs;
   late Worker worker;
@@ -35,37 +34,6 @@ class AuthController extends GetxController {
     });
 
     super.onInit();
-  }
-
-  void registerUser(String email, String password, String firstName, String lastName, String phone, String designation, context) async {
-    try {
-      isLoading(true);
-      await EncryptData.encyptAES(password);
-
-      await FirebaseDb.registerUser(
-          UserModel(
-            uid: uuid.v4(),
-            firstName: firstName,
-            lastName: lastName,
-            email: email,
-            password: EncryptData.encrypted!.base16,
-            designation: designation,
-            role: Strings.roleEmployee,
-            phone: phone,
-          ),
-          box,
-          context);
-      isLoading(false);
-    } catch (e) {
-      isLoading(false);
-      FlashMessage.showFlashMessage(title: 'Error', message: e.toString(), contentType: ContentType.failure, context: context);
-    }
-  }
-
-  void loginUser(String email, String password, BuildContext context) async {
-    isLoading(true);
-    await FirebaseDb.loginWithEmailAndPassword(fireStore, email, password, context, box);
-    isLoading(false);
   }
 
   navigation(roleValue) {
