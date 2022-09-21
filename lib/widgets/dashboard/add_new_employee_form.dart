@@ -6,7 +6,12 @@ import 'package:devroninsemployees/utils/responsive_layout.dart';
 import 'package:devroninsemployees/widgets/profile_setup.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:multi_select_flutter/chip_display/multi_select_chip_display.dart';
+import 'package:multi_select_flutter/dialog/multi_select_dialog_field.dart';
+import 'package:multi_select_flutter/util/multi_select_item.dart';
 import '../../constants/strings.dart';
+import '../../controllers/technology_controller.dart';
+import '../../model/technology_model.dart';
 import '../../utils/nemorphism_shadow.dart';
 
 class AddNewEmployeeForm extends StatelessWidget {
@@ -66,6 +71,10 @@ class AddNewEmployeeForm extends StatelessWidget {
                 const SizedBox(
                   height: 8,
                 ),
+                dropDownTechnology,
+                const SizedBox(
+                  height: 8,
+                ),
                 passwordField,
                 const SizedBox(
                   height: 28,
@@ -78,6 +87,65 @@ class AddNewEmployeeForm extends StatelessWidget {
             ),
           ),
         ),
+      ),
+    );
+  }
+
+  Obx get dropDownTechnology {
+    return Obx(
+      () => MultiSelectDialogField(
+        items: TechnologyController.instance.technology
+            .map((e) => MultiSelectItem<TechnologyModel>(e, e.technologyName!))
+            .toList(),
+        validator: (values) {
+          if (values == null || values.isEmpty) {
+            return "Please select service(s)";
+          }
+          return null;
+        },
+        initialValue: LoginPageController.instance.selectedTechnology,
+        title: const Text(
+          "Select Services",
+          style: TextStyle(color: Colors.blue),
+        ),
+        selectedColor: Colors.blue,
+        selectedItemsTextStyle: const TextStyle(fontSize: 14),
+        backgroundColor: Colors.white,
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: const BorderRadius.all(Radius.circular(6)),
+          border: Border.all(
+            color: Colors.blue,
+            width: 2,
+          ),
+        ),
+        buttonIcon: const Icon(
+          Icons.arrow_drop_down,
+          color: Colors.black,
+        ),
+        buttonText: const Text(
+          "Select Technology",
+          style: TextStyle(
+            color: Colors.black,
+            fontSize: 16,
+          ),
+        ),
+        chipDisplay: MultiSelectChipDisplay(
+          chipColor: Colors.grey,
+          textStyle: const TextStyle(fontSize: 14, color: Colors.red),
+          items: TechnologyController.instance.technology
+              .map((e) => MultiSelectItem<TechnologyModel>(
+                  e, e.technologyName.toString()))
+              .toList(),
+          onTap: (value) {
+            TechnologyController.instance.removeSelectedValue(value);
+          },
+        ),
+        onConfirm: (results) {
+          LoginPageController.instance.selectedTechnology =
+              results as List<TechnologyModel>;
+          print(LoginPageController.instance.selectedTechnology);
+        },
       ),
     );
   }
@@ -140,7 +208,7 @@ class AddNewEmployeeForm extends StatelessWidget {
                 LoginPageController.instance.phoneNumber.value,
                 LoginPageController.instance.profileUrl.value,
                 LoginPageController.instance.selectedDropdown.value,
-                LoginPageController.instance.technologyitem!,
+                LoginPageController.instance.selectedTechnology,
                 context);
           }
         },

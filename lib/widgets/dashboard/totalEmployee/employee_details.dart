@@ -34,10 +34,6 @@ class EmployeeDetails extends StatelessWidget {
             height: 12,
           ),
           Text(UserController.instance.users[index].designation),
-          const SizedBox(
-            height: 12,
-          ),
-          Text(UserController.instance.users[index].techName.toString()),
         ],
       ),
     );

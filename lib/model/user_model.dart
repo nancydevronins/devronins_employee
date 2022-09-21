@@ -11,7 +11,7 @@ class UserModel {
   late String role;
   late String phone;
   late String profileUrl;
-  late TechnologyModel technology;
+  late List<TechnologyModel> technology;
   String? techName;
 
   UserModel(
@@ -36,6 +36,6 @@ class UserModel {
     role = snapshot.get('role');
     phone = snapshot.get('phone');
     profileUrl = snapshot.get('profileUrl');
-    techName = snapshot.get('technology');
+    technology = snapshot.get('technology');
   }
 }

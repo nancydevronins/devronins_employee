@@ -157,7 +157,7 @@ class SignUp extends StatelessWidget {
                   LoginPageController.instance.phoneNumber.value,
                   LoginPageController.instance.profileUrl.value,
                   LoginPageController.instance.selectedDropdown.value,
-                  LoginPageController.instance.technologyitem!,
+                  LoginPageController.instance.selectedTechnology,
                   context);
             }
           } else {

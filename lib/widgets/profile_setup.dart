@@ -6,6 +6,9 @@ import 'package:devroninsemployees/utils/responsive_layout.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:multi_select_flutter/chip_display/multi_select_chip_display.dart';
+import 'package:multi_select_flutter/dialog/multi_select_dialog_field.dart';
+import 'package:multi_select_flutter/util/multi_select_item.dart';
 
 import '../constants/colors.dart';
 import '../constants/images.dart';
@@ -107,47 +110,59 @@ class ProfileSetup extends StatelessWidget {
 
   Obx get dropDownTechnology {
     return Obx(
-      () => Container(
-        margin: const EdgeInsets.only(top: 16, bottom: 16),
-        padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 8),
+      () => MultiSelectDialogField(
+        items: TechnologyController.instance.technology
+            .map((e) => MultiSelectItem<TechnologyModel>(e, e.technologyName!))
+            .toList(),
+        validator: (values) {
+          if (values == null || values.isEmpty) {
+            return "Please select service(s)";
+          }
+          return null;
+        },
+        initialValue: LoginPageController.instance.selectedTechnology,
+        title: const Text(
+          "Select Services",
+          style: TextStyle(color: Colors.blue),
+        ),
+        selectedColor: Colors.blue,
+        selectedItemsTextStyle: const TextStyle(fontSize: 14),
+        backgroundColor: Colors.white,
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(30),
-          color: Colors.grey.withOpacity(0.2),
-        ),
-        child: DropdownButtonFormField<TechnologyModel>(
-          style: TextStyle(color: Colors.grey.shade700),
-          decoration: const InputDecoration(
-            border: InputBorder.none,
+          color: Colors.white,
+          borderRadius: const BorderRadius.all(Radius.circular(6)),
+          border: Border.all(
+            color: Colors.blue,
+            width: 2,
           ),
+        ),
+        buttonIcon: const Icon(
+          Icons.arrow_drop_down,
+          color: Colors.black,
+        ),
+        buttonText: const Text(
+          "Select Technology",
+          style: TextStyle(
+            color: Colors.black,
+            fontSize: 16,
+          ),
+        ),
+        chipDisplay: MultiSelectChipDisplay(
+          chipColor: Colors.grey,
+          textStyle: const TextStyle(fontSize: 14, color: Colors.red),
           items: TechnologyController.instance.technology
-              .map(
-                (element) => DropdownMenuItem<TechnologyModel>(
-                  value: element,
-                  child: SizedBox(
-                    width: 150,
-                    child: Text(
-                      element.technologyName.toString(),
-                      textAlign: TextAlign.end,
-                    ),
-                  ),
-                ),
-              )
+              .map((e) => MultiSelectItem<TechnologyModel>(
+                  e, e.technologyName.toString()))
               .toList(),
-          value: LoginPageController.instance.technologyitem,
-          onChanged: (value) {
-            // TechnologyController.instance.technologyitem = value;
-            LoginPageController.instance.dropDownValueChange2(value!);
+          onTap: (value) {
+            TechnologyController.instance.removeSelectedValue(value);
           },
-          isExpanded: false,
-          hint: SizedBox(
-            width: 150, //and here
-            child: Text(
-              Strings.selectTechnology,
-              style: TextStyle(color: Colors.grey.shade700),
-              textAlign: TextAlign.end,
-            ),
-          ),
         ),
+        onConfirm: (results) {
+          LoginPageController.instance.selectedTechnology =
+              results as List<TechnologyModel>;
+          print(LoginPageController.instance.selectedTechnology);
+        },
       ),
     );
   }

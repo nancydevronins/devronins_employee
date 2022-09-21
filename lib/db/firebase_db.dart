@@ -4,6 +4,8 @@ import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:devroninsemployees/constants/strings.dart';
 import 'package:devroninsemployees/controllers/auth_controller.dart';
+import 'package:devroninsemployees/controllers/login_page_controller.dart';
+import 'package:devroninsemployees/controllers/technology_controller.dart';
 import 'package:devroninsemployees/encription/encypt_data.dart';
 import 'package:devroninsemployees/model/technology_model.dart';
 import 'package:devroninsemployees/model/user_model.dart';
@@ -34,7 +36,9 @@ class FirebaseDb {
       'designation': userModel.designation,
       'role': userModel.role,
       'phone': userModel.phone,
-      'technology': userModel.technology.id
+      'technology': LoginPageController.instance.selectedTechnology
+          .map((e) => e.id)
+          .toList(),
     });
     Get.back();
     FlashMessage.showFlashMessage(

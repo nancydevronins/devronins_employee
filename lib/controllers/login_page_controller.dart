@@ -29,6 +29,8 @@ class LoginPageController extends GetxController {
   RxString phoneNumber = ''.obs;
   var selectedDropdown = Strings.selectDesignation.obs;
   TechnologyModel? technologyitem;
+  List<TechnologyModel> selectedTechnology = [];
+
   final firstNameController = TextEditingController();
   final lastNameController = TextEditingController();
   final emailController = TextEditingController();
@@ -68,10 +70,6 @@ class LoginPageController extends GetxController {
   void toggleNextButton() {
     isEnableNextButton.value = !isEnableNextButton.value;
     update();
-  }
-
-  void dropDownValueChange2(TechnologyModel value) {
-    technologyitem = value;
   }
 
   void dropDownValueChange(String value) {
@@ -124,27 +122,27 @@ class LoginPageController extends GetxController {
       String phone,
       String profileUrl,
       String designation,
-      TechnologyModel technology,
+      selectedTechnology,
       context) async {
     try {
       isLoading(true);
+      print(selectedTechnology);
       await EncryptData.encyptAES(password);
-
       await FirebaseDb.registerUser(
           UserModel(
-            uid: uuid.v4(),
-            firstName: firstName,
-            lastName: lastName,
-            email: email,
-            password: EncryptData.encrypted!.base16,
-            designation: designation,
-            role: Strings.roleEmployee,
-            phone: phone,
-            profileUrl: profileUrl,
-            technology: technology,
-          ),
+              uid: uuid.v4(),
+              firstName: firstName,
+              lastName: lastName,
+              email: email,
+              password: EncryptData.encrypted!.base16,
+              designation: designation,
+              role: Strings.roleEmployee,
+              phone: phone,
+              profileUrl: profileUrl,
+              technology: selectedTechnology),
           box,
           context);
+
       isLoading(false);
     } catch (e) {
       isLoading(false);
