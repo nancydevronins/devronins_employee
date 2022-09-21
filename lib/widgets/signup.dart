@@ -58,7 +58,10 @@ class SignUp extends StatelessWidget {
           Container(
             padding: const EdgeInsets.all(4),
             decoration: BoxDecoration(
-                color: LoginPageController.instance.isEnableNextButton.value ? AppColors.blueColor : Colors.grey, shape: BoxShape.circle),
+                color: LoginPageController.instance.isEnableNextButton.value
+                    ? AppColors.blueColor
+                    : Colors.grey,
+                shape: BoxShape.circle),
           ),
           const SizedBox(
             width: 8,
@@ -66,7 +69,10 @@ class SignUp extends StatelessWidget {
           Container(
             padding: const EdgeInsets.all(4),
             decoration: BoxDecoration(
-                color: LoginPageController.instance.isEnableNextButton.value ? Colors.grey : AppColors.blueColor, shape: BoxShape.circle),
+                color: LoginPageController.instance.isEnableNextButton.value
+                    ? Colors.grey
+                    : AppColors.blueColor,
+                shape: BoxShape.circle),
           )
         ],
       ),
@@ -76,7 +82,11 @@ class SignUp extends StatelessWidget {
   Text signupToYourAccount(BuildContext context) {
     return Text(
       Strings.signUpToYOurAccount,
-      style: TextStyle(fontSize: ResponsiveLayout.isLargeScreen(context) && ResponsiveLayout.isMediumScreen(context) ? 20 : 16),
+      style: TextStyle(
+          fontSize: ResponsiveLayout.isLargeScreen(context) &&
+                  ResponsiveLayout.isMediumScreen(context)
+              ? 20
+              : 16),
     );
   }
 
@@ -93,28 +103,51 @@ class SignUp extends StatelessWidget {
   Obx nextBtn(context) {
     return Obx(() => InkWell(
         onTap: () {
-          if (!LoginPageController.instance.email.contains(Strings.emailValidation)) {
+          if (!LoginPageController.instance.email
+              .contains(Strings.emailValidation)) {
             FlashMessage.showFlashMessage(
-                title: Strings.error, message: Strings.invalidDevroninsEmail, contentType: ContentType.help, context: context);
+                title: Strings.error,
+                message: Strings.invalidDevroninsEmail,
+                contentType: ContentType.help,
+                context: context);
           } else if (LoginPageController.instance.password.isEmpty) {
             FlashMessage.showFlashMessage(
-                title: Strings.error, message: Strings.passwordRequired, contentType: ContentType.failure, context: context);
+                title: Strings.error,
+                message: Strings.passwordRequired,
+                contentType: ContentType.failure,
+                context: context);
           } else if (LoginPageController.instance.confirmPassword.isEmpty) {
             FlashMessage.showFlashMessage(
-                title: Strings.error, message: Strings.enterConfirmPassword, contentType: ContentType.failure, context: context);
-          } else if (LoginPageController.instance.password.value.trim() != LoginPageController.instance.confirmPassword.trim()) {
+                title: Strings.error,
+                message: Strings.enterConfirmPassword,
+                contentType: ContentType.failure,
+                context: context);
+          } else if (LoginPageController.instance.password.value.trim() !=
+              LoginPageController.instance.confirmPassword.trim()) {
             FlashMessage.showFlashMessage(
-                title: Strings.error, message: Strings.passwordDonotMatch, contentType: ContentType.failure, context: context);
+                title: Strings.error,
+                message: Strings.passwordDonotMatch,
+                contentType: ContentType.failure,
+                context: context);
           } else if (!LoginPageController.instance.isEnableNextButton.value) {
             if (LoginPageController.instance.firstName.isEmpty) {
               FlashMessage.showFlashMessage(
-                  title: Strings.error, message: Strings.firstNameRequired, contentType: ContentType.failure, context: context);
+                  title: Strings.error,
+                  message: Strings.firstNameRequired,
+                  contentType: ContentType.failure,
+                  context: context);
             } else if (LoginPageController.instance.lastName.isEmpty) {
               FlashMessage.showFlashMessage(
-                  title: Strings.error, message: Strings.lastNameRequired, contentType: ContentType.failure, context: context);
+                  title: Strings.error,
+                  message: Strings.lastNameRequired,
+                  contentType: ContentType.failure,
+                  context: context);
             } else if (LoginPageController.instance.phoneNumber.isEmpty) {
               FlashMessage.showFlashMessage(
-                  title: Strings.error, message: Strings.phoneNumberRequired, contentType: ContentType.failure, context: context);
+                  title: Strings.error,
+                  message: Strings.phoneNumberRequired,
+                  contentType: ContentType.failure,
+                  context: context);
             } else {
               LoginPageController.instance.registerUser(
                   LoginPageController.instance.email.value.trim(),
@@ -124,6 +157,7 @@ class SignUp extends StatelessWidget {
                   LoginPageController.instance.phoneNumber.value,
                   LoginPageController.instance.profileUrl.value,
                   LoginPageController.instance.selectedDropdown.value,
+                  LoginPageController.instance.technologyitem!,
                   context);
             }
           } else {
@@ -150,9 +184,17 @@ class SignUp extends StatelessWidget {
                 AppColors.blueColor,
               ], begin: Alignment.bottomRight, end: Alignment.topLeft),
               borderRadius: BorderRadius.circular(20),
-              boxShadow: [BoxShadow(color: AppColors.blueColor.withOpacity(.3), offset: const Offset(0, 8), blurRadius: 8)]),
+              boxShadow: [
+                BoxShadow(
+                    color: AppColors.blueColor.withOpacity(.3),
+                    offset: const Offset(0, 8),
+                    blurRadius: 8)
+              ]),
           child: Center(
-            child: Text(LoginPageController.instance.isEnableNextButton.value ? Strings.next : Strings.signUp,
+            child: Text(
+                LoginPageController.instance.isEnableNextButton.value
+                    ? Strings.next
+                    : Strings.signUp,
                 style: const TextStyle(
                   color: Colors.white,
                   fontSize: 18,
@@ -174,7 +216,10 @@ class SignUp extends StatelessWidget {
         onChanged: (value) {
           LoginPageController.instance.confirmPasswordChange(value.obs);
         },
-        decoration: const InputDecoration(contentPadding: const EdgeInsets.all(12), border: InputBorder.none, hintText: Strings.confirmPassword),
+        decoration: const InputDecoration(
+            contentPadding: const EdgeInsets.all(12),
+            border: InputBorder.none,
+            hintText: Strings.confirmPassword),
       ),
     );
   }
@@ -197,7 +242,10 @@ class SignUp extends StatelessWidget {
                 border: InputBorder.none,
                 hintText: Strings.password,
                 suffixIcon: IconButton(
-                  icon: Icon(LoginPageController.instance.isVisiblePassword.value ? Icons.visibility_off : Icons.visibility),
+                  icon: Icon(
+                      LoginPageController.instance.isVisiblePassword.value
+                          ? Icons.visibility_off
+                          : Icons.visibility),
                   onPressed: () {
                     LoginPageController.instance.togglePassword();
                   },
@@ -218,7 +266,10 @@ class SignUp extends StatelessWidget {
         onChanged: (value) {
           LoginPageController.instance.emailChange(value.obs);
         },
-        decoration: const InputDecoration(contentPadding: EdgeInsets.all(12), border: InputBorder.none, hintText: Strings.email),
+        decoration: const InputDecoration(
+            contentPadding: EdgeInsets.all(12),
+            border: InputBorder.none,
+            hintText: Strings.email),
       ),
     );
   }

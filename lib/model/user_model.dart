@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:devroninsemployees/model/technology_model.dart';
 
 class UserModel {
   late String uid;
@@ -10,6 +11,8 @@ class UserModel {
   late String role;
   late String phone;
   late String profileUrl;
+  late TechnologyModel technology;
+  String? techName;
 
   UserModel(
       {required this.uid,
@@ -20,7 +23,9 @@ class UserModel {
       required this.designation,
       required this.role,
       required this.phone,
-      required this.profileUrl});
+      required this.profileUrl,
+      required this.technology,
+      this.techName});
   UserModel.fromDocumentSnapshot({required DocumentSnapshot snapshot}) {
     uid = snapshot.id;
     firstName = snapshot.get('firstName');
@@ -31,5 +36,6 @@ class UserModel {
     role = snapshot.get('role');
     phone = snapshot.get('phone');
     profileUrl = snapshot.get('profileUrl');
+    techName = snapshot.get('technology');
   }
 }

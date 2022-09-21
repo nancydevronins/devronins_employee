@@ -20,7 +20,8 @@ class EmployeeDetails extends StatelessWidget {
           const SizedBox(
             height: 12,
           ),
-          Text("${UserController.instance.users[index].firstName} ${UserController.instance.users[index].lastName}"),
+          Text(
+              "${UserController.instance.users[index].firstName} ${UserController.instance.users[index].lastName}"),
           const SizedBox(
             height: 12,
           ),
@@ -33,6 +34,10 @@ class EmployeeDetails extends StatelessWidget {
             height: 12,
           ),
           Text(UserController.instance.users[index].designation),
+          const SizedBox(
+            height: 12,
+          ),
+          Text(UserController.instance.users[index].techName.toString()),
         ],
       ),
     );

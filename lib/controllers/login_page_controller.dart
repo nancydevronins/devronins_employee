@@ -8,6 +8,7 @@ import 'package:image_picker/image_picker.dart';
 
 import '../db/firebase_db.dart';
 import '../encription/encypt_data.dart';
+import '../model/technology_model.dart';
 import '../model/user_model.dart';
 import 'package:uuid/uuid.dart';
 
@@ -27,6 +28,7 @@ class LoginPageController extends GetxController {
   RxString lastName = ''.obs;
   RxString phoneNumber = ''.obs;
   var selectedDropdown = Strings.selectDesignation.obs;
+  TechnologyModel? technologyitem;
   final firstNameController = TextEditingController();
   final lastNameController = TextEditingController();
   final emailController = TextEditingController();
@@ -37,6 +39,16 @@ class LoginPageController extends GetxController {
   RxBool isLoading = false.obs;
   List dropdownTextList = [
     Strings.selectDesignation,
+    Strings.associate,
+    Strings.srAssociate,
+    Strings.softwareEngineer,
+    Strings.srSoftwareEngineer,
+    Strings.teamLead,
+    Strings.projectManager,
+  ];
+
+  List dropDownTechnologyList = [
+    Strings.selectTechnology,
     Strings.associate,
     Strings.srAssociate,
     Strings.softwareEngineer,
@@ -56,6 +68,10 @@ class LoginPageController extends GetxController {
   void toggleNextButton() {
     isEnableNextButton.value = !isEnableNextButton.value;
     update();
+  }
+
+  void dropDownValueChange2(TechnologyModel value) {
+    technologyitem = value;
   }
 
   void dropDownValueChange(String value) {
@@ -101,7 +117,15 @@ class LoginPageController extends GetxController {
   }
 
   void registerUser(
-      String email, String password, String firstName, String lastName, String phone, String profileUrl, String designation, context) async {
+      String email,
+      String password,
+      String firstName,
+      String lastName,
+      String phone,
+      String profileUrl,
+      String designation,
+      TechnologyModel technology,
+      context) async {
     try {
       isLoading(true);
       await EncryptData.encyptAES(password);
@@ -117,13 +141,18 @@ class LoginPageController extends GetxController {
             role: Strings.roleEmployee,
             phone: phone,
             profileUrl: profileUrl,
+            technology: technology,
           ),
           box,
           context);
       isLoading(false);
     } catch (e) {
       isLoading(false);
-      FlashMessage.showFlashMessage(title: 'Error', message: e.toString(), contentType: ContentType.failure, context: context);
+      FlashMessage.showFlashMessage(
+          title: 'Error',
+          message: e.toString(),
+          contentType: ContentType.failure,
+          context: context);
     }
   }
 

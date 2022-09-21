@@ -1,12 +1,15 @@
 import 'package:devroninsemployees/constants/strings.dart';
 import 'package:devroninsemployees/constants/strings.dart';
 import 'package:devroninsemployees/controllers/login_page_controller.dart';
+import 'package:devroninsemployees/controllers/technology_controller.dart';
 import 'package:devroninsemployees/utils/responsive_layout.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 
 import '../constants/colors.dart';
 import '../constants/images.dart';
+import '../model/technology_model.dart';
 import '../utils/nemorphism_shadow.dart';
 import '../utils/wave_loading.dart';
 
@@ -23,7 +26,9 @@ class ProfileSetup extends StatelessWidget {
         lastNameField,
         phoneNumberField,
         const Text(Strings.selectDesignation),
-        dropdownDesignations
+        dropdownDesignations,
+        const Text(Strings.selectTechnology),
+        dropDownTechnology
       ],
     );
   }
@@ -59,7 +64,8 @@ class ProfileSetup extends StatelessWidget {
                 boxShadow: NeomorphismShape.boxShape,
                 color: AppColors.white10,
               ),
-              child: Image.network(LoginPageController.instance.profileUrl.value)),
+              child:
+                  Image.network(LoginPageController.instance.profileUrl.value)),
     );
   }
 
@@ -73,9 +79,11 @@ class ProfileSetup extends StatelessWidget {
           ),
           child: DropdownButtonFormField(
               style: TextStyle(color: Colors.grey.shade700),
-              decoration: const InputDecoration(border: InputBorder.none, contentPadding: EdgeInsets.all(12)),
+              decoration: const InputDecoration(
+                  border: InputBorder.none, contentPadding: EdgeInsets.all(12)),
               onChanged: (newValue) {
-                LoginPageController.instance.dropDownValueChange(newValue.toString());
+                LoginPageController.instance
+                    .dropDownValueChange(newValue.toString());
               },
               value: LoginPageController.instance.selectedDropdown.value,
               items: LoginPageController.instance.dropdownTextList
@@ -97,6 +105,53 @@ class ProfileSetup extends StatelessWidget {
         ));
   }
 
+  Obx get dropDownTechnology {
+    return Obx(
+      () => Container(
+        margin: const EdgeInsets.only(top: 16, bottom: 16),
+        padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 8),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(30),
+          color: Colors.grey.withOpacity(0.2),
+        ),
+        child: DropdownButtonFormField<TechnologyModel>(
+          style: TextStyle(color: Colors.grey.shade700),
+          decoration: const InputDecoration(
+            border: InputBorder.none,
+          ),
+          items: TechnologyController.instance.technology
+              .map(
+                (element) => DropdownMenuItem<TechnologyModel>(
+                  value: element,
+                  child: SizedBox(
+                    width: 150,
+                    child: Text(
+                      element.technologyName.toString(),
+                      textAlign: TextAlign.end,
+                    ),
+                  ),
+                ),
+              )
+              .toList(),
+          value: LoginPageController.instance.technologyitem,
+          onChanged: (value) {
+            // TechnologyController.instance.technologyitem = value;
+            LoginPageController.instance.dropDownValueChange2(value!);
+          },
+          isExpanded: false,
+          hint: SizedBox(
+            width: 150, //and here
+            child: Text(
+              Strings.selectTechnology,
+              style: TextStyle(color: Colors.grey.shade700),
+              textAlign: TextAlign.end,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
   Container get phoneNumberField {
     return Container(
       margin: const EdgeInsets.only(top: 30, bottom: 16),
@@ -109,7 +164,10 @@ class ProfileSetup extends StatelessWidget {
         onChanged: (value) {
           LoginPageController.instance.phoneNumber.value = value;
         },
-        decoration: InputDecoration(contentPadding: EdgeInsets.all(12), border: InputBorder.none, hintText: Strings.phoneNumber),
+        decoration: InputDecoration(
+            contentPadding: EdgeInsets.all(12),
+            border: InputBorder.none,
+            hintText: Strings.phoneNumber),
       ),
     );
   }
@@ -126,7 +184,10 @@ class ProfileSetup extends StatelessWidget {
         onChanged: (value) {
           LoginPageController.instance.lastName.value = value;
         },
-        decoration: InputDecoration(contentPadding: EdgeInsets.all(12), border: InputBorder.none, hintText: Strings.lastName),
+        decoration: InputDecoration(
+            contentPadding: EdgeInsets.all(12),
+            border: InputBorder.none,
+            hintText: Strings.lastName),
       ),
     );
   }
@@ -143,7 +204,10 @@ class ProfileSetup extends StatelessWidget {
         onChanged: (value) {
           LoginPageController.instance.firstName.value = value;
         },
-        decoration: const InputDecoration(contentPadding: EdgeInsets.all(12), border: InputBorder.none, hintText: Strings.firstName),
+        decoration: const InputDecoration(
+            contentPadding: EdgeInsets.all(12),
+            border: InputBorder.none,
+            hintText: Strings.firstName),
       ),
     );
   }
@@ -153,7 +217,11 @@ class ProfileSetup extends StatelessWidget {
       padding: const EdgeInsets.all(20.0),
       child: Text(
         Strings.setUpYourProfile,
-        style: TextStyle(fontSize: ResponsiveLayout.isLargeScreen(context) && ResponsiveLayout.isMediumScreen(context) ? 20 : 16),
+        style: TextStyle(
+            fontSize: ResponsiveLayout.isLargeScreen(context) &&
+                    ResponsiveLayout.isMediumScreen(context)
+                ? 20
+                : 16),
       ),
     );
   }
