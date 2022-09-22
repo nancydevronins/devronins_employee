@@ -197,8 +197,8 @@ class EmployeeDetails extends StatelessWidget {
   String getTechnologiesName(List<String> technology) {
     String technologiesName = '';
     for (var tec in TechnologyController.instance.technology) {
-      for (int i = 0; i < technology.length; i++) {
-        if (technology[i] == tec.id) {
+      for (var techs in technology) {
+        if (techs.toString() == tec.id) {
           technologiesName = '$technologiesName ${tec.technologyName!}';
         }
       }
