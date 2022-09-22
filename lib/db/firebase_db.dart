@@ -21,13 +21,8 @@ import 'package:image_picker/image_picker.dart';
 import 'package:uuid/uuid.dart';
 
 class FirebaseDb {
-  static registerUser(
-      UserModel userModel, GetStorage box, BuildContext context) async {
-    await AuthController()
-        .fireStore
-        .collection(Strings.users)
-        .doc(userModel.uid)
-        .set({
+  static registerUser(UserModel userModel, GetStorage box, BuildContext context) async {
+    await AuthController().fireStore.collection(Strings.users).doc(userModel.uid).set({
       'uid': userModel.uid,
       'firstName': userModel.firstName,
       'lastName': userModel.lastName,
@@ -36,40 +31,19 @@ class FirebaseDb {
       'designation': userModel.designation,
       'role': userModel.role,
       'phone': userModel.phone,
-      'technology': LoginPageController.instance.selectedTechnology
-          .map((e) => e.id)
-          .toList(),
+      'technology': LoginPageController.instance.selectedTechnology.map((e) => e.id).toList(),
     });
     Get.back();
     FlashMessage.showFlashMessage(
-        title: Strings.registeredSuccess,
-        message: Strings.withEmail + userModel.email,
-        contentType: ContentType.success,
-        context: context);
+        title: Strings.registeredSuccess, message: Strings.withEmail + userModel.email, contentType: ContentType.success, context: context);
   }
 
   static Stream<List<UserModel>> usersStream() {
-    return AuthController()
-        .fireStore
-        .collection(Strings.users)
-        .where('role', isNotEqualTo: Strings.roleAdmin)
-        .snapshots()
-        .map((querySnapshot) {
+    return AuthController().fireStore.collection(Strings.users).where('role', isNotEqualTo: Strings.roleAdmin).snapshots().map((querySnapshot) {
       List<UserModel> users = [];
 
       for (var user in querySnapshot.docs) {
         final userModel = UserModel.fromDocumentSnapshot(snapshot: user);
-        // AuthController.instance.fireStore
-        //     .collection('technology')
-        //     .where("technologyId", isEqualTo: userModel.technology.id)
-        //     .snapshots()
-        //     .map((event) {
-        //   for (var data in event.docs) {
-        //     final techModel = TechnologyModel.fromDocumentSnapshot(data);
-        //     techs.add(techModel);
-        //     userModel.technology.technologyName = techModel.technologyName;
-        //   }
-        // });
         users.add(userModel);
       }
 
@@ -82,10 +56,7 @@ class FirebaseDb {
         .fireStore
         .collection(Strings.technology)
         .snapshots()
-        .map((querySnapshot) => querySnapshot.docs
-            .map((technology) =>
-                TechnologyModel.fromDocumentSnapshot(technology))
-            .toList());
+        .map((querySnapshot) => querySnapshot.docs.map((technology) => TechnologyModel.fromDocumentSnapshot(technology)).toList());
   }
 
   static Future<String?> uploadAndGetImgUrlInStorage(XFile file) async {
@@ -93,8 +64,7 @@ class FirebaseDb {
       return null;
     }
     String imageName = ("image_${DateTime.now().microsecondsSinceEpoch}.jpg");
-    Reference ref =
-        FirebaseStorage.instance.ref().child('users').child('/$imageName');
+    Reference ref = FirebaseStorage.instance.ref().child('users').child('/$imageName');
     final metadata = SettableMetadata(
       contentType: 'image/jpeg',
       customMetadata: {'picked-file-path': file.path},
@@ -109,26 +79,17 @@ class FirebaseDb {
     }
   }
 
-  static storeCalenderData(FirebaseFirestore firestore, Meeting meeting,
-      BuildContext context) async {
-    await firestore.collection(Strings.calender.toLowerCase()).doc().set({
-      'eventName': meeting.eventName,
-      'isAllDay': meeting.isAllDay,
-      'date': meeting.date.toString()
-    });
+  static storeCalenderData(FirebaseFirestore firestore, Meeting meeting, BuildContext context) async {
+    await firestore
+        .collection(Strings.calender.toLowerCase())
+        .doc()
+        .set({'eventName': meeting.eventName, 'isAllDay': meeting.isAllDay, 'date': meeting.date.toString()});
     Get.back();
-    FlashMessage.showFlashMessage(
-        title: Strings.eventAdded,
-        message: meeting.eventName,
-        contentType: ContentType.success,
-        context: context);
+    FlashMessage.showFlashMessage(title: Strings.eventAdded, message: meeting.eventName, contentType: ContentType.success, context: context);
   }
 
   static Stream<List<Meeting>> calenderStream(FirebaseFirestore firestore) {
-    return firestore
-        .collection(Strings.calender.toLowerCase())
-        .snapshots()
-        .map((querySnapshot) {
+    return firestore.collection(Strings.calender.toLowerCase()).snapshots().map((querySnapshot) {
       List<Meeting> calender = [];
       for (var holidays in querySnapshot.docs) {
         final calenderModel = Meeting.fromDocumentSnapshot(snapshot: holidays);
@@ -138,14 +99,8 @@ class FirebaseDb {
     });
   }
 
-  static loginWithEmailAndPassword(String email, String password,
-      BuildContext context, GetStorage box) async {
-    await AuthController()
-        .fireStore
-        .collection(Strings.users)
-        .where(Strings.email.toLowerCase(), isEqualTo: email)
-        .get()
-        .then((querySnapShot) async {
+  static loginWithEmailAndPassword(String email, String password, BuildContext context, GetStorage box) async {
+    await AuthController().fireStore.collection(Strings.users).where(Strings.email.toLowerCase(), isEqualTo: email).get().then((querySnapShot) async {
       print("snapshot$querySnapShot");
       if (querySnapShot.docs.isNotEmpty) {
         for (var snapshot in querySnapShot.docs) {
@@ -155,33 +110,20 @@ class FirebaseDb {
           await EncryptData.decyptAES(getPassword);
           if (password == EncryptData.decrypted) {
             FlashMessage.showFlashMessage(
-                title: Strings.loginSuccess,
-                message: Strings.withEmail + email,
-                contentType: ContentType.success,
-                context: context);
+                title: Strings.loginSuccess, message: Strings.withEmail + email, contentType: ContentType.success, context: context);
             box.write(Strings.uidKey, userId);
           } else {
             FlashMessage.showFlashMessage(
-                title: Strings.passwordDonotMatch,
-                message: Strings.withEmail + email,
-                contentType: ContentType.failure,
-                context: context);
+                title: Strings.passwordDonotMatch, message: Strings.withEmail + email, contentType: ContentType.failure, context: context);
           }
         }
       } else {
         FlashMessage.showFlashMessage(
-            title: Strings.accountNotFound,
-            message: Strings.withEmail + email,
-            contentType: ContentType.failure,
-            context: context);
+            title: Strings.accountNotFound, message: Strings.withEmail + email, contentType: ContentType.failure, context: context);
       }
     }).onError((error, stackTrace) {
       print("Error $error");
-      FlashMessage.showFlashMessage(
-          title: Strings.error,
-          message: error.toString(),
-          contentType: ContentType.failure,
-          context: context);
+      FlashMessage.showFlashMessage(title: Strings.error, message: error.toString(), contentType: ContentType.failure, context: context);
     });
   }
 
@@ -189,11 +131,7 @@ class FirebaseDb {
     FirebaseFirestore fireStore,
     String userId,
   ) {
-    return fireStore
-        .collection(Strings.users)
-        .doc(userId)
-        .snapshots()
-        .map((docSnapshot) {
+    return fireStore.collection(Strings.users).doc(userId).snapshots().map((docSnapshot) {
       String role = docSnapshot.get('role');
       return role;
     });

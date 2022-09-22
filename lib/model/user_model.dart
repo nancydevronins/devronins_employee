@@ -11,8 +11,7 @@ class UserModel {
   late String role;
   late String phone;
   late String profileUrl;
-  late List<TechnologyModel> technology;
-  String? techName;
+  late List<String> technology;
 
   UserModel(
       {required this.uid,
@@ -24,8 +23,7 @@ class UserModel {
       required this.role,
       required this.phone,
       required this.profileUrl,
-      required this.technology,
-      this.techName});
+      required this.technology});
   UserModel.fromDocumentSnapshot({required DocumentSnapshot snapshot}) {
     uid = snapshot.id;
     firstName = snapshot.get('firstName');
@@ -36,6 +34,8 @@ class UserModel {
     role = snapshot.get('role');
     phone = snapshot.get('phone');
     profileUrl = snapshot.get('profileUrl');
-    technology = snapshot.get('technology');
+    List techs = snapshot.get('technology');
+    technology = techs.map((element) => element.toString()).toList();
+    // technology = snapshot.get('technology');
   }
 }

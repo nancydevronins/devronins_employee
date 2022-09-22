@@ -9,6 +9,5 @@ class TechnologyModel {
   TechnologyModel.fromDocumentSnapshot(DocumentSnapshot snapshot) {
     id = snapshot['technologyId'];
     technologyName = snapshot['technologyName'];
-    print(technologyName);
   }
 }

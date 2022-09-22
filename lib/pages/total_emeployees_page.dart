@@ -1,5 +1,6 @@
 import 'package:auto_animated/auto_animated.dart';
 import 'package:devroninsemployees/constants/strings.dart';
+import 'package:devroninsemployees/controllers/technology_controller.dart';
 import 'package:devroninsemployees/controllers/user_controller.dart';
 import 'package:devroninsemployees/utils/wave_loading.dart';
 import 'package:flutter/material.dart';

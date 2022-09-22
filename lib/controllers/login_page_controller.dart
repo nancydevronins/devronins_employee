@@ -114,19 +114,10 @@ class LoginPageController extends GetxController {
     isLoading(false);
   }
 
-  void registerUser(
-      String email,
-      String password,
-      String firstName,
-      String lastName,
-      String phone,
-      String profileUrl,
-      String designation,
-      selectedTechnology,
-      context) async {
+  void registerUser(String email, String password, String firstName, String lastName, String phone, String profileUrl, String designation,
+      selectedTechnology, context) async {
     try {
       isLoading(true);
-      print(selectedTechnology);
       await EncryptData.encyptAES(password);
       await FirebaseDb.registerUser(
           UserModel(
@@ -146,11 +137,7 @@ class LoginPageController extends GetxController {
       isLoading(false);
     } catch (e) {
       isLoading(false);
-      FlashMessage.showFlashMessage(
-          title: 'Error',
-          message: e.toString(),
-          contentType: ContentType.failure,
-          context: context);
+      FlashMessage.showFlashMessage(title: 'Error', message: e.toString(), contentType: ContentType.failure, context: context);
     }
   }
 

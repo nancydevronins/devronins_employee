@@ -27,18 +27,21 @@ class LoginPage extends StatelessWidget {
                       color: Colors.white,
                       borderRadius: BorderRadius.circular(16),
                       boxShadow: const [BoxShadow(color: Colors.black12, offset: Offset(0, 8), blurRadius: 8)]),
-                  child: Obx(() {
-                    return Column(
-                      children: [
-                        LoginPageController.instance.isEnableSignUp.value ? SignUp() : Login(),
-                        TextButton(
-                            onPressed: () {
-                              LoginPageController.instance.toggleSignUp();
-                            },
-                            child: Text(LoginPageController.instance.isEnableSignUp.value ? Strings.alreadyHaveAnAccount : Strings.newUserSignupHere))
-                      ],
-                    );
-                  })),
+                  child: Login()
+                  // Obx(() {
+                  //         return Column(
+                  //           children: [
+                  //
+                  //             // LoginPageController.instance.isEnableSignUp.value ? SignUp() : Login(),
+                  //             // TextButton(
+                  //             //     onPressed: () {
+                  //             //       LoginPageController.instance.toggleSignUp();
+                  //             //     },
+                  //             //     child: Text(LoginPageController.instance.isEnableSignUp.value ? Strings.alreadyHaveAnAccount : Strings.newUserSignupHere))
+                  //           ],
+                  //         );
+                  //       })
+                  ),
             ],
           ),
         ),

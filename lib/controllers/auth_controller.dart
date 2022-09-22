@@ -46,6 +46,12 @@ class AuthController extends GetxController {
     }
   }
 
+  void loginUser(String email, String password, BuildContext context) async {
+    isLoading(true);
+    await FirebaseDb.loginWithEmailAndPassword(email, password, context, box);
+    isLoading(false);
+  }
+
   void logout() async {
     await box.erase();
     role.value = '';

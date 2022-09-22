@@ -12,7 +12,6 @@ class TechnologyController extends GetxController {
   @override
   void onReady() {
     technologyList.bindStream(FirebaseDb.technologyStream());
-
     super.onReady();
   }
 
