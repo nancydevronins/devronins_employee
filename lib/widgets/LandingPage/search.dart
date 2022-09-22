@@ -1,5 +1,5 @@
 import 'package:devroninsemployees/constants/strings.dart';
-import 'package:devroninsemployees/widgets/LandingPage/send_button.dart';
+import 'package:devroninsemployees/widgets/LandingPage/submit_button.dart';
 import 'package:flutter/material.dart';
 
 import '../../utils/responsive_layout.dart';
@@ -32,7 +32,11 @@ class Search extends StatelessWidget {
                   )),
               Expanded(
                 flex: 2,
-                child: SendBtn(),
+                child: SubmitBtn(
+                  onTap: () {},
+                  title: '',
+                  isEnableIcon: true,
+                ),
               )
             ],
           ),

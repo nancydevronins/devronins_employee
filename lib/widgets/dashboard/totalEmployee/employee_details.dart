@@ -10,6 +10,7 @@ import '../../../constants/images.dart';
 import '../../../controllers/user_controller.dart';
 import '../../../utils/nemorphism_shadow.dart';
 import '../../../utils/responsive_layout.dart';
+import '../../LandingPage/submit_button.dart';
 
 class EmployeeDetails extends StatelessWidget {
   const EmployeeDetails({Key? key, required this.index}) : super(key: key);
@@ -18,102 +19,125 @@ class EmployeeDetails extends StatelessWidget {
   Widget build(BuildContext context) {
     return SizedBox(
       width: ResponsiveLayout.isSmallScreen(context) ? null : 500,
-      child: Column(
-        children: [
-          profileImg,
-          const SizedBox(
-            height: 12,
-          ),
-          Obx(
-            () => Stack(
-              children: [
-                AnimatedContainer(
-                  padding: const EdgeInsets.all(20),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(14),
-                    boxShadow: NeomorphismShape.boxShape,
-                    color: AppColors.white10,
-                  ),
-                  curve: Curves.ease,
-                  duration: const Duration(seconds: 1),
-                  height: UserController.instance.isEditEnable.value
-                      ? UserController.instance.height.value * 0.3
-                      : UserController.instance.height.value * 0.28,
-                  child: SingleChildScrollView(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: UserController.instance.isEditEnable.value
-                          ? [
-                              TextField(
-                                controller: UserController.instance.firstNameController..text = UserController.instance.users[index].firstName,
-                                decoration: const InputDecoration(hintText: Strings.enterFirstName),
-                              ),
-                              const SizedBox(
-                                height: 12,
-                              ),
-                              TextField(
-                                controller: UserController.instance.lastNameController..text = UserController.instance.users[index].lastName,
-                                decoration: const InputDecoration(hintText: Strings.enterLastName),
-                              ),
-                              const SizedBox(
-                                height: 12,
-                              ),
-                              TextField(
-                                controller: UserController.instance.emailController..text = UserController.instance.users[index].email,
-                                decoration: const InputDecoration(hintText: Strings.enterEmail),
-                              ),
-                              const SizedBox(
-                                height: 12,
-                              ),
-                              TextField(
-                                controller: UserController.instance.phoneController..text = UserController.instance.users[index].phone,
-                                decoration: const InputDecoration(hintText: Strings.enterPhone),
-                              ),
-                              const SizedBox(
-                                height: 12,
-                              ),
-                            ]
-                          : [
-                              name,
-                              const SizedBox(
-                                height: 12,
-                              ),
-                              userEmail,
-                              const SizedBox(
-                                height: 12,
-                              ),
-                              phone,
-                              const SizedBox(
-                                height: 12,
-                              ),
-                              designation,
-                              const SizedBox(
-                                height: 12,
-                              ),
-                              technology
-                            ],
-                    ),
-                  ),
-                ),
-                Positioned(
-                  right: 0,
-                  child: IconButton(
-                      onPressed: () {
-                        UserController.instance.isEditEnable.value = !UserController.instance.isEditEnable.value;
-                      },
-                      icon: const Icon(Icons.edit_note_outlined)),
-                ),
-              ],
+      child: SingleChildScrollView(
+        child: Column(
+          children: [
+            profileImg,
+            const SizedBox(
+              height: 12,
             ),
-          )
+            profileDetails,
+            const SizedBox(
+              height: 16,
+            ),
+            Obx(() => UserController.instance.isEditEnable.value
+                ? SubmitBtn(
+                    title: Strings.update,
+                    isEnableIcon: false,
+                    onTap: () {},
+                  )
+                : Container())
+          ],
+        ),
+      ),
+    );
+  }
+
+  Obx get profileDetails {
+    return Obx(
+      () => Stack(
+        children: [
+          AnimatedContainer(
+            padding: const EdgeInsets.all(20),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(14),
+              boxShadow: NeomorphismShape.boxShape,
+              color: AppColors.white10,
+            ),
+            curve: Curves.ease,
+            duration: const Duration(seconds: 1),
+            height:
+                UserController.instance.isEditEnable.value ? UserController.instance.height.value * 0.3 : UserController.instance.height.value * 0.28,
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: UserController.instance.isEditEnable.value
+                    ? [
+                        TextField(
+                          controller: UserController.instance.firstNameController..text = UserController.instance.users[index].firstName,
+                          decoration: const InputDecoration(hintText: Strings.enterFirstName),
+                        ),
+                        const SizedBox(
+                          height: 12,
+                        ),
+                        TextField(
+                          controller: UserController.instance.lastNameController..text = UserController.instance.users[index].lastName,
+                          decoration: const InputDecoration(hintText: Strings.enterLastName),
+                        ),
+                        const SizedBox(
+                          height: 12,
+                        ),
+                        TextField(
+                          controller: UserController.instance.emailController..text = UserController.instance.users[index].email,
+                          decoration: const InputDecoration(hintText: Strings.enterEmail),
+                        ),
+                        const SizedBox(
+                          height: 12,
+                        ),
+                        TextField(
+                          controller: UserController.instance.phoneController..text = UserController.instance.users[index].phone,
+                          decoration: const InputDecoration(hintText: Strings.enterPhone),
+                        ),
+                        const SizedBox(
+                          height: 12,
+                        ),
+                      ]
+                    : [
+                        name,
+                        const SizedBox(
+                          height: 12,
+                        ),
+                        userEmail,
+                        const SizedBox(
+                          height: 12,
+                        ),
+                        phone,
+                        const SizedBox(
+                          height: 12,
+                        ),
+                        designation,
+                        const SizedBox(
+                          height: 12,
+                        ),
+                        technology
+                      ],
+              ),
+            ),
+          ),
+          Positioned(
+            right: 0,
+            child: IconButton(
+                onPressed: () {
+                  UserController.instance.isEditEnable.value = !UserController.instance.isEditEnable.value;
+                },
+                icon: const Icon(Icons.edit_note_outlined)),
+          ),
         ],
       ),
     );
   }
 
-  Text get technology {
+  Row get technology {
     String technologies = getTechnologiesName(UserController.instance.users[index].technology);
-    return Text(technologies);
+    return Row(
+      children: [
+        const Icon(Icons.developer_board_outlined),
+        Text(
+          technologies,
+          style: const TextStyle(fontSize: 18),
+        )
+      ],
+    );
   }
 
   Row get designation {
@@ -185,10 +209,11 @@ class EmployeeDetails extends StatelessWidget {
         boxShadow: NeomorphismShape.boxShape,
         color: AppColors.white10,
       ),
+      alignment: Alignment.center,
       child: UserController.instance.users[index].profileUrl.isEmpty
           ? Image.asset(
               Images.placeholder,
-              height: 20,
+              fit: BoxFit.cover,
             )
           : Image.network(UserController.instance.users[index].profileUrl),
     );
@@ -199,10 +224,10 @@ class EmployeeDetails extends StatelessWidget {
     for (var tec in TechnologyController.instance.technology) {
       for (var techs in technology) {
         if (techs.toString() == tec.id) {
-          technologiesName = '$technologiesName ${tec.technologyName!}';
+          technologiesName = technologiesName + ", " + tec.technologyName!;
         }
       }
     }
-    return technologiesName;
+    return technologiesName.replaceFirst(',', ' ');
   }
 }
