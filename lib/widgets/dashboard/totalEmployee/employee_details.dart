@@ -202,18 +202,25 @@ class EmployeeDetails extends StatelessWidget {
 
   Container get profileImg {
     return Container(
-      height: Get.height * 0.35,
-      clipBehavior: Clip.antiAlias,
       decoration: BoxDecoration(
         shape: BoxShape.circle,
         boxShadow: NeomorphismShape.boxShape,
         color: AppColors.white10,
       ),
-      alignment: Alignment.center,
       child: UserController.instance.users[index].profileUrl.isEmpty
-          ? Image.asset(
-              Images.placeholder,
-              fit: BoxFit.cover,
+          ? Stack(
+              children: [
+                Image.asset(
+                  Images.placeholder,
+                  height: Get.height * 0.35,
+                ),
+                Positioned(
+                  right: 10,
+                  child: Image.asset(
+                    Images.edit,
+                  ),
+                )
+              ],
             )
           : Image.network(UserController.instance.users[index].profileUrl),
     );
