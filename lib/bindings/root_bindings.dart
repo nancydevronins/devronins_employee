@@ -5,6 +5,8 @@ import 'package:devroninsemployees/controllers/technology_controller.dart';
 import 'package:devroninsemployees/controllers/user_controller.dart';
 import 'package:get/get.dart';
 
+import '../controllers/designation_controller.dart';
+
 class RootBindings extends Bindings {
   @override
   void dependencies() {
@@ -13,5 +15,6 @@ class RootBindings extends Bindings {
     Get.lazyPut(() => AdminHomePageController());
     Get.lazyPut(() => UserController());
     Get.lazyPut(() => TechnologyController());
+    Get.lazyPut(() => DesignationController());
   }
 }

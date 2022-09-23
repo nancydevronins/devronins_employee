@@ -1,6 +1,8 @@
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:devroninsemployees/constants/colors.dart';
+import 'package:devroninsemployees/controllers/designation_controller.dart';
 import 'package:devroninsemployees/controllers/login_page_controller.dart';
+import 'package:devroninsemployees/model/designation_model.dart';
 import 'package:devroninsemployees/utils/flash_message.dart';
 import 'package:devroninsemployees/utils/responsive_layout.dart';
 import 'package:devroninsemployees/widgets/profile_setup.dart';
@@ -94,6 +96,8 @@ class AddNewEmployeeForm extends StatelessWidget {
   Obx get dropDownTechnology {
     return Obx(
       () => MultiSelectDialogField(
+        dialogHeight: 300,
+        dialogWidth: 30,
         items: TechnologyController.instance.technology
             .map((e) => MultiSelectItem<TechnologyModel>(e, e.technologyName!))
             .toList(),
@@ -105,7 +109,7 @@ class AddNewEmployeeForm extends StatelessWidget {
         },
         initialValue: LoginPageController.instance.selectedTechnology,
         title: const Text(
-          "Select Services",
+          "Select Technology",
           style: TextStyle(color: Colors.blue),
         ),
         selectedColor: Colors.blue,
@@ -365,7 +369,7 @@ class AddNewEmployeeForm extends StatelessWidget {
             borderRadius: BorderRadius.circular(30),
             color: Colors.grey.withOpacity(0.2),
           ),
-          child: DropdownButtonFormField(
+          child: DropdownButtonFormField<DesignationModel>(
               style: TextStyle(color: Colors.grey.shade700),
               decoration: const InputDecoration(
                   border: InputBorder.none, contentPadding: EdgeInsets.all(12)),
@@ -373,22 +377,26 @@ class AddNewEmployeeForm extends StatelessWidget {
                 LoginPageController.instance
                     .dropDownValueChange(newValue.toString());
               },
-              value: LoginPageController.instance.selectedDropdown.value,
-              items: LoginPageController.instance.dropdownTextList
-                  .map((item) => item == Strings.selectDesignation
-                      ? DropdownMenuItem(
-                          value: item,
-                          enabled: false,
+              hint: const SizedBox(
+                width: 150, //and here
+                child: Text(
+                  "Select Designation",
+                  style: TextStyle(color: Colors.grey),
+                  textAlign: TextAlign.end,
+                ),
+              ),
+              value: LoginPageController.instance.designation,
+              items: DesignationController.instance.designations
+                  .map((designation) => DropdownMenuItem<DesignationModel>(
+                        value: designation,
+                        child: SizedBox(
+                          width: 150,
                           child: Text(
-                            item,
+                            designation.designationName!,
+                            textAlign: TextAlign.end,
                           ),
-                        )
-                      : DropdownMenuItem(
-                          value: item,
-                          child: Text(
-                            item,
-                          ),
-                        ))
+                        ),
+                      ))
                   .toList()),
         ));
   }

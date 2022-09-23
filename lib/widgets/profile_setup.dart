@@ -88,6 +88,14 @@ class ProfileSetup extends StatelessWidget {
                 LoginPageController.instance
                     .dropDownValueChange(newValue.toString());
               },
+              hint: const SizedBox(
+                width: 150, //and here
+                child: Text(
+                  "Select Item Type",
+                  style: TextStyle(color: Colors.grey),
+                  textAlign: TextAlign.end,
+                ),
+              ),
               value: LoginPageController.instance.selectedDropdown.value,
               items: LoginPageController.instance.dropdownTextList
                   .map((item) => item == Strings.selectDesignation

@@ -15,7 +15,8 @@ class Strings {
   static const String forgotPassword = 'Forgot Password?';
   static const String loginToYourAccount = 'Login To Your Account';
   static const String newUserSignupHere = 'New user? SignUp here';
-  static const String alreadyHaveAnAccount = 'Already have an account? Login here';
+  static const String alreadyHaveAnAccount =
+      'Already have an account? Login here';
   static const String signUpToYOurAccount = 'Sign Up To Your Account';
   static const String passwordDontMatch = 'Password does not match';
   static const String pleaseCheckYourPassword = 'Please check your password';
@@ -24,7 +25,8 @@ class Strings {
   static const String withEmail = 'With email ';
   static const String emailValidation = '@devronins.com';
   static const String error = 'Error';
-  static const String invalidDevroninsEmail = 'This is not a DevRonins email id';
+  static const String invalidDevroninsEmail =
+      'This is not a DevRonins email id';
   static const String passwordRequired = 'Password is required';
   static const String passwordDonotMatch = 'Password do not match';
   static const String accountNotFound = 'Account Not Found!';
@@ -57,6 +59,9 @@ class Strings {
   static const String users = 'users';
   static const String technology = 'technology';
   static const String update = 'Update';
+  static const String addTechnology = 'Add Technology';
+  static const String addDesignation = 'Add Designation';
+  static const String designation = 'Designation';
   static const String totalEmployee = 'Total Employees';
   static const String calender = 'Calender';
   static const String addNewMember = 'Add new member';
@@ -67,4 +72,5 @@ class Strings {
   static const String festivalTitle = 'Enter Festivals name here';
   static const String eventAdded = 'Event Added Successfully';
   static const String profilePicRequired = 'Profile Avatar is required!';
+  static const String enterTechnology = "Enter Technology";
 }

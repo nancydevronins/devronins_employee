@@ -8,7 +8,8 @@ class SubmitBtn extends StatelessWidget {
   final Function() onTap;
   final bool isEnableIcon;
   final String title;
-  SubmitBtn({required this.onTap, required this.isEnableIcon, required this.title});
+  SubmitBtn(
+      {required this.onTap, required this.isEnableIcon, required this.title});
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -19,7 +20,12 @@ class SubmitBtn extends StatelessWidget {
             AppColors.blueColor,
           ], begin: Alignment.bottomRight, end: Alignment.topLeft),
           borderRadius: BorderRadius.circular(20.0),
-          boxShadow: [BoxShadow(color: AppColors.blueColor.withOpacity(.3), offset: const Offset(0.0, 8.0), blurRadius: 8.0)]),
+          boxShadow: [
+            BoxShadow(
+                color: AppColors.blueColor.withOpacity(.3),
+                offset: const Offset(0.0, 8.0),
+                blurRadius: 8.0)
+          ]),
       child: Material(
         color: Colors.transparent,
         child: InkWell(
@@ -32,7 +38,8 @@ class SubmitBtn extends StatelessWidget {
                         Text(Strings.notify,
                             style: TextStyle(
                                 color: Colors.white,
-                                fontSize: ResponsiveLayout.isSmallScreen(context)
+                                fontSize: ResponsiveLayout.isSmallScreen(
+                                        context)
                                     ? 12
                                     : ResponsiveLayout.isMediumScreen(context)
                                         ? 12
@@ -56,15 +63,19 @@ class SubmitBtn extends StatelessWidget {
                         )
                       ],
                     )
-                  : Text(title,
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontSize: ResponsiveLayout.isSmallScreen(context)
-                              ? 12
-                              : ResponsiveLayout.isMediumScreen(context)
+                  : Padding(
+                      padding:
+                          EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+                      child: Text(title,
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontSize: ResponsiveLayout.isSmallScreen(context)
                                   ? 12
-                                  : 16,
-                          letterSpacing: 1.0))),
+                                  : ResponsiveLayout.isMediumScreen(context)
+                                      ? 12
+                                      : 16,
+                              letterSpacing: 1.0)),
+                    )),
         ),
       ),
     );

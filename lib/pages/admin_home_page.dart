@@ -8,6 +8,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../widgets/dashboard/calender/calender.dart';
+import '../widgets/designation.dart';
+import '../widgets/technology.dart';
 
 class AdminHomePage extends StatelessWidget {
   AdminHomePage({Key? key}) : super(key: key);
@@ -36,7 +38,12 @@ class AdminHomePage extends StatelessWidget {
                 AppColors.greenColor,
                 AppColors.blueColor,
               ], begin: Alignment.bottomRight, end: Alignment.topLeft),
-              boxShadow: [BoxShadow(color: AppColors.blueColor.withOpacity(.3), offset: Offset(0, 8), blurRadius: 8)]),
+              boxShadow: [
+                BoxShadow(
+                    color: AppColors.blueColor.withOpacity(.3),
+                    offset: Offset(0, 8),
+                    blurRadius: 8)
+              ]),
         ),
       ),
       body: SafeArea(
@@ -50,21 +57,29 @@ class AdminHomePage extends StatelessWidget {
                         AppColors.greenColor,
                         AppColors.blueColor,
                       ], begin: Alignment.bottomRight, end: Alignment.topLeft),
-                      boxShadow: [BoxShadow(color: AppColors.blueColor.withOpacity(.3), offset: Offset(0, 8), blurRadius: 8)]),
+                      boxShadow: [
+                        BoxShadow(
+                            color: AppColors.blueColor.withOpacity(.3),
+                            offset: Offset(0, 8),
+                            blurRadius: 8)
+                      ]),
                   child: NavigationRail(
                     minWidth: 60,
                     indicatorColor: Colors.black54,
                     selectedLabelTextStyle: TextStyle(color: Colors.white),
                     labelType: NavigationRailLabelType.selected,
                     backgroundColor: Colors.transparent,
-                    selectedIndex: AdminHomePageController.instance.screenIndex.value,
+                    selectedIndex:
+                        AdminHomePageController.instance.screenIndex.value,
                     destinations: navRailDestinations,
                     onDestinationSelected: (index) {
-                      AdminHomePageController.instance.screenIndex.value = index;
+                      AdminHomePageController.instance.screenIndex.value =
+                          index;
                     },
                   ),
                 )),
-            Obx(() => createScreenFor(AdminHomePageController.instance.screenIndex.value))
+            Obx(() => createScreenFor(
+                AdminHomePageController.instance.screenIndex.value))
           ],
         ),
       ),
@@ -78,9 +93,9 @@ class AdminHomePage extends StatelessWidget {
       case 1:
         return const Calender();
       case 2:
-        return const Text('dfg');
+        return const Technology();
       case 3:
-        return const Text('dfgsa');
+        return const Designation();
       default:
         return Text('fdgdfgdf');
     }
@@ -99,13 +114,13 @@ List<NavigationRailDestination> navRailDestinations = const [
     selectedIcon: Icon(Icons.text_snippet),
   ),
   NavigationRailDestination(
-    icon: Icon(Icons.feedback),
-    label: Text('Enquery'),
-    selectedIcon: Icon(Icons.feedback_outlined),
+    icon: Icon(Icons.developer_board_outlined),
+    label: Text('Technology'),
+    selectedIcon: Icon(Icons.developer_board_off_outlined),
   ),
   NavigationRailDestination(
-    icon: Icon(Icons.settings),
-    label: Text('Settings'),
-    selectedIcon: Icon(Icons.settings_outlined),
+    icon: Icon(Icons.badge_outlined),
+    label: Text('Designation'),
+    selectedIcon: Icon(Icons.badge_sharp),
   )
 ];

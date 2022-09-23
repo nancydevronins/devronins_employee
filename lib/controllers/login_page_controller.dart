@@ -1,6 +1,7 @@
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:devroninsemployees/constants/strings.dart';
+import 'package:devroninsemployees/model/designation_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
@@ -30,7 +31,7 @@ class LoginPageController extends GetxController {
   var selectedDropdown = Strings.selectDesignation.obs;
   TechnologyModel? technologyitem;
   List<TechnologyModel> selectedTechnology = [];
-
+  DesignationModel? designation;
   final firstNameController = TextEditingController();
   final lastNameController = TextEditingController();
   final emailController = TextEditingController();
