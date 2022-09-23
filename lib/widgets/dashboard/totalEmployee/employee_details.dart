@@ -33,7 +33,7 @@ class EmployeeDetails extends StatelessWidget {
               height: 16,
             ),
             Obx(() => UserController.instance.isEditEnable.value
-                ? SubmitBtn(
+                ? Btn(
                     title: Strings.update,
                     isEnableIcon: false,
                     onTap: () {},

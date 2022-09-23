@@ -32,7 +32,7 @@ class Search extends StatelessWidget {
                   )),
               Expanded(
                 flex: 2,
-                child: SubmitBtn(
+                child: Btn(
                   onTap: () {},
                   title: '',
                   isEnableIcon: true,

@@ -28,8 +28,7 @@ class AddNewEmployeeForm extends StatelessWidget {
           children: [
             Text(
               Strings.addNewMember,
-              style: TextStyle(
-                  fontSize: ResponsiveLayout.isSmallScreen(context) ? 16 : 24),
+              style: TextStyle(fontSize: ResponsiveLayout.isSmallScreen(context) ? 16 : 24),
             ),
             IconButton(
                 onPressed: () {
@@ -94,9 +93,7 @@ class AddNewEmployeeForm extends StatelessWidget {
   Obx get dropDownTechnology {
     return Obx(
       () => MultiSelectDialogField(
-        items: TechnologyController.instance.technology
-            .map((e) => MultiSelectItem<TechnologyModel>(e, e.technologyName!))
-            .toList(),
+        items: TechnologyController.instance.technology.map((e) => MultiSelectItem<TechnologyModel>(e, e.technologyName!)).toList(),
         validator: (values) {
           if (values == null || values.isEmpty) {
             return "Please select service(s)";
@@ -133,17 +130,13 @@ class AddNewEmployeeForm extends StatelessWidget {
         chipDisplay: MultiSelectChipDisplay(
           chipColor: Colors.grey,
           textStyle: const TextStyle(fontSize: 14, color: Colors.red),
-          items: TechnologyController.instance.technology
-              .map((e) => MultiSelectItem<TechnologyModel>(
-                  e, e.technologyName.toString()))
-              .toList(),
+          items: TechnologyController.instance.technology.map((e) => MultiSelectItem<TechnologyModel>(e, e.technologyName.toString())).toList(),
           onTap: (value) {
             TechnologyController.instance.removeSelectedValue(value);
           },
         ),
         onConfirm: (results) {
-          LoginPageController.instance.selectedTechnology =
-              results as List<TechnologyModel>;
+          LoginPageController.instance.selectedTechnology = results as List<TechnologyModel>;
           print(LoginPageController.instance.selectedTechnology);
         },
       ),
@@ -157,48 +150,25 @@ class AddNewEmployeeForm extends StatelessWidget {
         onTap: () {
           if (LoginPageController.instance.profileUrl.isEmpty) {
             FlashMessage.showFlashMessage(
-                title: Strings.error,
-                message: Strings.profilePicRequired,
-                contentType: ContentType.failure,
-                context: context);
+                title: Strings.error, message: Strings.profilePicRequired, contentType: ContentType.failure, context: context);
           } else if (LoginPageController.instance.firstName.isEmpty) {
             FlashMessage.showFlashMessage(
-                title: Strings.error,
-                message: Strings.firstNameRequired,
-                contentType: ContentType.failure,
-                context: context);
+                title: Strings.error, message: Strings.firstNameRequired, contentType: ContentType.failure, context: context);
           } else if (LoginPageController.instance.lastName.isEmpty) {
             FlashMessage.showFlashMessage(
-                title: Strings.error,
-                message: Strings.lastNameRequired,
-                contentType: ContentType.failure,
-                context: context);
-          } else if (!LoginPageController.instance.email
-              .contains(Strings.emailValidation)) {
+                title: Strings.error, message: Strings.lastNameRequired, contentType: ContentType.failure, context: context);
+          } else if (!LoginPageController.instance.email.contains(Strings.emailValidation)) {
             FlashMessage.showFlashMessage(
-                title: Strings.error,
-                message: Strings.invalidDevroninsEmail,
-                contentType: ContentType.failure,
-                context: context);
+                title: Strings.error, message: Strings.invalidDevroninsEmail, contentType: ContentType.failure, context: context);
           } else if (LoginPageController.instance.phoneNumber.isEmpty) {
             FlashMessage.showFlashMessage(
-                title: Strings.error,
-                message: Strings.phoneNumberRequired,
-                contentType: ContentType.failure,
-                context: context);
-          } else if (LoginPageController.instance.selectedDropdown.value ==
-              Strings.selectDesignation) {
+                title: Strings.error, message: Strings.phoneNumberRequired, contentType: ContentType.failure, context: context);
+          } else if (LoginPageController.instance.selectedDropdown.value == Strings.selectDesignation) {
             FlashMessage.showFlashMessage(
-                title: Strings.error,
-                message: Strings.selectDesignation,
-                contentType: ContentType.failure,
-                context: context);
+                title: Strings.error, message: Strings.selectDesignation, contentType: ContentType.failure, context: context);
           } else if (LoginPageController.instance.password.isEmpty) {
             FlashMessage.showFlashMessage(
-                title: Strings.error,
-                message: Strings.passwordRequired,
-                contentType: ContentType.failure,
-                context: context);
+                title: Strings.error, message: Strings.passwordRequired, contentType: ContentType.failure, context: context);
           } else {
             LoginPageController.instance.registerUser(
                 LoginPageController.instance.email.value.trim(),
@@ -213,29 +183,19 @@ class AddNewEmployeeForm extends StatelessWidget {
           }
         },
         child: Container(
-            width:
-                ResponsiveLayout.isSmallScreen(context) ? null : Get.width / 8,
+            width: ResponsiveLayout.isSmallScreen(context) ? null : Get.width / 8,
             decoration: BoxDecoration(
                 gradient: const LinearGradient(colors: [
                   AppColors.greenColor,
                   AppColors.blueColor,
                 ], begin: Alignment.bottomRight, end: Alignment.topLeft),
                 borderRadius: BorderRadius.circular(20),
-                boxShadow: [
-                  BoxShadow(
-                      color: AppColors.blueColor.withOpacity(.3),
-                      offset: const Offset(0, 8),
-                      blurRadius: 8)
-                ]),
+                boxShadow: [BoxShadow(color: AppColors.blueColor.withOpacity(.3), offset: const Offset(0, 8), blurRadius: 8)]),
             child: Padding(
               padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
               child: Center(
                 child: Text(Strings.add.toUpperCase(),
-                    style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 18,
-                        letterSpacing: 1,
-                        fontWeight: FontWeight.bold)),
+                    style: const TextStyle(color: Colors.white, fontSize: 18, letterSpacing: 1, fontWeight: FontWeight.bold)),
               ),
             )),
       ),
@@ -245,8 +205,7 @@ class AddNewEmployeeForm extends StatelessWidget {
   Obx get passwordField {
     return Obx(
       () => TextField(
-        controller: LoginPageController.instance.passwordController
-          ..text = LoginPageController.instance.password.value,
+        controller: LoginPageController.instance.passwordController..text = LoginPageController.instance.password.value,
         obscureText: LoginPageController.instance.isVisiblePassword.value,
         onChanged: (value) {
           LoginPageController.instance.passwordChange(value.obs);
@@ -262,12 +221,9 @@ class AddNewEmployeeForm extends StatelessWidget {
             suffixIcon: Padding(
               padding: const EdgeInsets.all(8.0),
               child: IconButton(
-                icon: Icon(LoginPageController.instance.isVisiblePassword.value
-                    ? Icons.visibility_off
-                    : Icons.visibility),
+                icon: Icon(LoginPageController.instance.isVisiblePassword.value ? Icons.visibility_off : Icons.visibility),
                 onPressed: () {
-                  LoginPageController.instance.isVisiblePassword.value =
-                      !LoginPageController.instance.isVisiblePassword.value;
+                  LoginPageController.instance.isVisiblePassword.value = !LoginPageController.instance.isVisiblePassword.value;
                 },
               ),
             ),
@@ -279,8 +235,7 @@ class AddNewEmployeeForm extends StatelessWidget {
 
   TextField get phoneNumberField {
     return TextField(
-      controller: LoginPageController.instance.phoneController
-        ..text = LoginPageController.instance.phoneNumber.value,
+      controller: LoginPageController.instance.phoneController..text = LoginPageController.instance.phoneNumber.value,
       onChanged: (value) {
         LoginPageController.instance.phoneNumber.value = value;
       },
@@ -299,8 +254,7 @@ class AddNewEmployeeForm extends StatelessWidget {
 
   TextField get emailField {
     return TextField(
-      controller: LoginPageController.instance.emailController
-        ..text = LoginPageController.instance.email.value,
+      controller: LoginPageController.instance.emailController..text = LoginPageController.instance.email.value,
       onChanged: (value) {
         LoginPageController.instance.email.value = value;
       },
@@ -319,8 +273,7 @@ class AddNewEmployeeForm extends StatelessWidget {
 
   TextField get lastNameField {
     return TextField(
-      controller: LoginPageController.instance.lastNameController
-        ..text = LoginPageController.instance.lastName.value,
+      controller: LoginPageController.instance.lastNameController..text = LoginPageController.instance.lastName.value,
       onChanged: (value) {
         LoginPageController.instance.lastName.value = value;
       },
@@ -339,8 +292,7 @@ class AddNewEmployeeForm extends StatelessWidget {
 
   TextField get firstNameField {
     return TextField(
-      controller: LoginPageController.instance.firstNameController
-        ..text = LoginPageController.instance.firstName.value,
+      controller: LoginPageController.instance.firstNameController..text = LoginPageController.instance.firstName.value,
       onChanged: (value) {
         LoginPageController.instance.firstName.value = value;
       },
@@ -367,11 +319,9 @@ class AddNewEmployeeForm extends StatelessWidget {
           ),
           child: DropdownButtonFormField(
               style: TextStyle(color: Colors.grey.shade700),
-              decoration: const InputDecoration(
-                  border: InputBorder.none, contentPadding: EdgeInsets.all(12)),
+              decoration: const InputDecoration(border: InputBorder.none, contentPadding: EdgeInsets.all(12)),
               onChanged: (newValue) {
-                LoginPageController.instance
-                    .dropDownValueChange(newValue.toString());
+                LoginPageController.instance.dropDownValueChange(newValue.toString());
               },
               value: LoginPageController.instance.selectedDropdown.value,
               items: LoginPageController.instance.dropdownTextList

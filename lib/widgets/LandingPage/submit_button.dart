@@ -4,15 +4,16 @@ import '../../constants/colors.dart';
 import '../../constants/strings.dart';
 import '../../utils/responsive_layout.dart';
 
-class SubmitBtn extends StatelessWidget {
+class Btn extends StatelessWidget {
   final Function() onTap;
   final bool isEnableIcon;
   final String title;
-  SubmitBtn({required this.onTap, required this.isEnableIcon, required this.title});
+  Btn({required this.onTap, required this.isEnableIcon, required this.title});
   @override
   Widget build(BuildContext context) {
     return Container(
       height: 40,
+      padding: EdgeInsets.all(8),
       decoration: BoxDecoration(
           gradient: const LinearGradient(colors: [
             AppColors.greenColor,
