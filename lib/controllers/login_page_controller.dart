@@ -96,16 +96,18 @@ class LoginPageController extends GetxController {
   }
 
   void pickAndStoreUserImageInDb() async {
-    isLoading(true);
-    return await _picker.pickImage(source: ImageSource.gallery).then((imgFile) {
-      FirebaseDb.uploadAndGetImgUrlInStorage(imgFile!).then((url) {
+    try {
+      final resultPicker = await _picker.pickImage(source: ImageSource.gallery);
+      if (resultPicker == null) return;
+      isLoading(true);
+      FirebaseDb.uploadAndGetImgUrlInStorage(resultPicker).then((url) {
         print("profileUrl${url}");
         isLoading(false);
         return profileUrl.value = url!;
-      }).catchError(() {
-        isLoading(false);
       });
-    });
+    } catch (e) {
+      print('error$e');
+    }
   }
 
   void loginUser(String email, String password, BuildContext context) async {

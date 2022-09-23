@@ -37,39 +37,44 @@ class ProfileSetup extends StatelessWidget {
   }
 
   Obx selectProfilePic() {
-    return Obx(
-      () => LoginPageController.instance.profileUrl.value.isEmpty
-          ? LoginPageController.instance.isLoading.value
-              ? Center(child: WaveLoading())
+    return Obx(() => Container(
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            boxShadow: NeomorphismShape.boxShape,
+            color: AppColors.white10,
+          ),
+          child: LoginPageController.instance.profileUrl.value.isEmpty
+              ? LoginPageController.instance.isLoading.value
+                  ? const Center(child: WaveLoading())
+                  : Stack(
+                      children: [
+                        Image.asset(
+                          Images.placeholder,
+                          height: Get.height * 0.35,
+                        ),
+                        Positioned(
+                          right: 0,
+                          top: 30,
+                          child: InkWell(
+                            onTap: () {
+                              LoginPageController.instance.pickAndStoreUserImageInDb();
+                            },
+                            child: Image.asset(
+                              Images.edit,
+                            ),
+                          ),
+                        )
+                      ],
+                    )
               : Container(
-                  height: Get.height * 0.35,
                   clipBehavior: Clip.antiAlias,
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
                     boxShadow: NeomorphismShape.boxShape,
                     color: AppColors.white10,
                   ),
-                  child: InkWell(
-                    onTap: () {
-                      LoginPageController.instance.pickAndStoreUserImageInDb();
-                    },
-                    child: Image.asset(
-                      Images.placeholder,
-                    ),
-                  ),
-                )
-          : Container(
-              width: Get.width,
-              height: Get.height * 0.35,
-              clipBehavior: Clip.antiAlias,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                boxShadow: NeomorphismShape.boxShape,
-                color: AppColors.white10,
-              ),
-              child:
-                  Image.network(LoginPageController.instance.profileUrl.value)),
-    );
+                  child: Image.network(LoginPageController.instance.profileUrl.value)),
+        ));
   }
 
   Obx get dropdownDesignations {
@@ -82,11 +87,9 @@ class ProfileSetup extends StatelessWidget {
           ),
           child: DropdownButtonFormField(
               style: TextStyle(color: Colors.grey.shade700),
-              decoration: const InputDecoration(
-                  border: InputBorder.none, contentPadding: EdgeInsets.all(12)),
+              decoration: const InputDecoration(border: InputBorder.none, contentPadding: EdgeInsets.all(12)),
               onChanged: (newValue) {
-                LoginPageController.instance
-                    .dropDownValueChange(newValue.toString());
+                LoginPageController.instance.dropDownValueChange(newValue.toString());
               },
               value: LoginPageController.instance.selectedDropdown.value,
               items: LoginPageController.instance.dropdownTextList
@@ -111,9 +114,7 @@ class ProfileSetup extends StatelessWidget {
   Obx get dropDownTechnology {
     return Obx(
       () => MultiSelectDialogField(
-        items: TechnologyController.instance.technology
-            .map((e) => MultiSelectItem<TechnologyModel>(e, e.technologyName!))
-            .toList(),
+        items: TechnologyController.instance.technology.map((e) => MultiSelectItem<TechnologyModel>(e, e.technologyName!)).toList(),
         validator: (values) {
           if (values == null || values.isEmpty) {
             return "Please select service(s)";
@@ -150,17 +151,13 @@ class ProfileSetup extends StatelessWidget {
         chipDisplay: MultiSelectChipDisplay(
           chipColor: Colors.grey,
           textStyle: const TextStyle(fontSize: 14, color: Colors.red),
-          items: TechnologyController.instance.technology
-              .map((e) => MultiSelectItem<TechnologyModel>(
-                  e, e.technologyName.toString()))
-              .toList(),
+          items: TechnologyController.instance.technology.map((e) => MultiSelectItem<TechnologyModel>(e, e.technologyName.toString())).toList(),
           onTap: (value) {
             TechnologyController.instance.removeSelectedValue(value);
           },
         ),
         onConfirm: (results) {
-          LoginPageController.instance.selectedTechnology =
-              results as List<TechnologyModel>;
+          LoginPageController.instance.selectedTechnology = results as List<TechnologyModel>;
           print(LoginPageController.instance.selectedTechnology);
         },
       ),
@@ -179,10 +176,7 @@ class ProfileSetup extends StatelessWidget {
         onChanged: (value) {
           LoginPageController.instance.phoneNumber.value = value;
         },
-        decoration: InputDecoration(
-            contentPadding: EdgeInsets.all(12),
-            border: InputBorder.none,
-            hintText: Strings.phoneNumber),
+        decoration: InputDecoration(contentPadding: EdgeInsets.all(12), border: InputBorder.none, hintText: Strings.phoneNumber),
       ),
     );
   }
@@ -199,10 +193,7 @@ class ProfileSetup extends StatelessWidget {
         onChanged: (value) {
           LoginPageController.instance.lastName.value = value;
         },
-        decoration: InputDecoration(
-            contentPadding: EdgeInsets.all(12),
-            border: InputBorder.none,
-            hintText: Strings.lastName),
+        decoration: InputDecoration(contentPadding: EdgeInsets.all(12), border: InputBorder.none, hintText: Strings.lastName),
       ),
     );
   }
@@ -219,10 +210,7 @@ class ProfileSetup extends StatelessWidget {
         onChanged: (value) {
           LoginPageController.instance.firstName.value = value;
         },
-        decoration: const InputDecoration(
-            contentPadding: EdgeInsets.all(12),
-            border: InputBorder.none,
-            hintText: Strings.firstName),
+        decoration: const InputDecoration(contentPadding: EdgeInsets.all(12), border: InputBorder.none, hintText: Strings.firstName),
       ),
     );
   }
@@ -232,11 +220,7 @@ class ProfileSetup extends StatelessWidget {
       padding: const EdgeInsets.all(20.0),
       child: Text(
         Strings.setUpYourProfile,
-        style: TextStyle(
-            fontSize: ResponsiveLayout.isLargeScreen(context) &&
-                    ResponsiveLayout.isMediumScreen(context)
-                ? 20
-                : 16),
+        style: TextStyle(fontSize: ResponsiveLayout.isLargeScreen(context) && ResponsiveLayout.isMediumScreen(context) ? 20 : 16),
       ),
     );
   }

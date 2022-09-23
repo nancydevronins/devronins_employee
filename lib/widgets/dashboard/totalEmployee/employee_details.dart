@@ -7,9 +7,11 @@ import 'package:get/get.dart';
 
 import '../../../constants/colors.dart';
 import '../../../constants/images.dart';
+import '../../../controllers/login_page_controller.dart';
 import '../../../controllers/user_controller.dart';
 import '../../../utils/nemorphism_shadow.dart';
 import '../../../utils/responsive_layout.dart';
+import '../../../utils/wave_loading.dart';
 import '../../LandingPage/submit_button.dart';
 
 class EmployeeDetails extends StatelessWidget {
@@ -202,28 +204,50 @@ class EmployeeDetails extends StatelessWidget {
 
   Container get profileImg {
     return Container(
-      decoration: BoxDecoration(
-        shape: BoxShape.circle,
-        boxShadow: NeomorphismShape.boxShape,
-        color: AppColors.white10,
-      ),
-      child: UserController.instance.users[index].profileUrl.isEmpty
-          ? Stack(
-              children: [
-                Image.asset(
-                  Images.placeholder,
-                  height: Get.height * 0.35,
-                ),
-                Positioned(
-                  right: 10,
-                  child: Image.asset(
-                    Images.edit,
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          boxShadow: NeomorphismShape.boxShape,
+          color: AppColors.white10,
+        ),
+        child: Obx(
+          () => UserController.instance.users[index].profileUrl.isEmpty && LoginPageController.instance.profileUrl.value.isEmpty
+              ? LoginPageController.instance.isLoading.value
+                  ? const Center(child: WaveLoading())
+                  : Stack(
+                      children: [
+                        Image.asset(
+                          Images.placeholder,
+                          height: Get.height * 0.35,
+                        ),
+                        Positioned(
+                          right: 0,
+                          top: 30,
+                          child: InkWell(
+                            onTap: () {
+                              LoginPageController.instance.pickAndStoreUserImageInDb();
+                            },
+                            child: Image.asset(
+                              Images.edit,
+                            ),
+                          ),
+                        )
+                      ],
+                    )
+              : Container(
+                  clipBehavior: Clip.antiAlias,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    boxShadow: NeomorphismShape.boxShape,
+                    color: AppColors.white10,
                   ),
-                )
-              ],
-            )
-          : Image.network(UserController.instance.users[index].profileUrl),
-    );
+                  child: Image.network(
+                    UserController.instance.users[index].profileUrl.isNotEmpty
+                        ? UserController.instance.users[index].profileUrl
+                        : LoginPageController.instance.profileUrl.value,
+                    height: Get.height * 0.35,
+                  ),
+                ),
+        ));
   }
 
   String getTechnologiesName(List<String> technology) {
